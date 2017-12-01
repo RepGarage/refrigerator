@@ -1,0 +1,13 @@
+<div class="grid" [@expandState]="expandState" >
+  <ng-container *ngFor="let ref of refrigerators | async">
+    <div class="ref-unit" (click)="selectRefrigerator(ref)">
+      <div class="ref-header">
+        <a class="name">{{ ref.name }}</a>
+        <img [src]="ref.iconAssetUrl" alt="ref-icon">
+      </div>
+    </div>
+  </ng-container>
+  <div class="add-refrigerator-placeholder" (click)="triggerAddRefrigeratorActive()">
+    <img src="/assets/icons/ic_add_black.svg" alt="add">
+  </div>
+</div>

@@ -1,0 +1,44 @@
+@import '../../mixins'  
+
+@include scrollbars(.5em, silver)
+.grid
+  display: grid
+  .ref-unit
+    height: auto
+    width: auto
+    border: 1px solid grey
+    border-top: none
+    border-right: none
+    border-radius: 0 25px 25px 0
+    overflow: hidden
+    box-shadow: -1px 1px 8px 0px #006080
+    cursor: pointer
+    .ref-header
+      display: grid
+      grid-template-columns: 70% 1fr
+      background-color: #78fff7
+      .name
+        font-family: 'Main Font'
+        padding-left: 12px
+        margin: 0
+        font-size: 2.5em
+        align-self: center
+      img
+        height: 48px
+        width: 48px
+        justify-self: end
+
+.add-refrigerator-placeholder
+  border: 1px dashed silver
+  display: flex
+  flex-direction: column
+  justify-content: center
+  margin-right: 4px
+  cursor: pointer
+  &:hover
+    background-color: #e6e6e6
+  &:active
+    background-color: #d6d6d6
+
+
+

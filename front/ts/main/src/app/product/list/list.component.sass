@@ -1,0 +1,27 @@
+@import '../../mixins'
+
+@include scrollbars(0.5em, silver)
+
+.list-group
+  cursor: pointer
+  max-height: 67.5vh
+  overflow-y: auto
+  font-family: 'PT Sans'
+.products-list
+  cursor: pointer
+  display: grid
+  grid-template-columns: 1fr 1fr 1fr
+  grid-gap: 4px
+.add-product-placeholder
+  min-height: 14vh
+  margin: 12px 0
+  border: 1px dashed silver
+  border-radius: 15px
+  background-color: white
+  display: flex
+  flex-direction: column
+  justify-content: center
+  &:hover
+    background-color: #e6e6e6
+  &:active
+    background-color: #d6d6d6

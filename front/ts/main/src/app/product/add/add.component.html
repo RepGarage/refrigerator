@@ -1,0 +1,63 @@
+<div class="modal" (click)="fadeToBlack()"></div>
+<div class="content fixed z-199">
+  <div class="block-header">
+    Добавить новый продукт
+  </div>
+  <div class="block-body round-bottom wrapped">
+    <div class="search-block" *ngIf="!(selectedProduct | async); else productDetail">
+      <input class="input" [formControl]="productName">
+      <div class="search-results" *ngIf="(availableProducts | async); let prods">
+        <ng-container *ngFor="let p of prods">
+          <app-prod-list-unit (click)="selectProduct(p)" [product]="p"></app-prod-list-unit>
+        </ng-container>
+      </div>
+    </div>
+    <ng-template #productDetail>
+      <ng-container *ngIf="(selectedProduct | async); let p">
+        <div class="detailed-block">
+          <div class="nav back">
+            <img src="/assets/icons/ic_reply_black.svg" alt="back" (click)="selectProduct(null)">
+            <span class="title">{{ p.name }}</span>
+          </div>
+          <div class="details-block">
+            <form [formGroup]="selectedProductFormGroup">
+              <div class="form-field">
+                <div class="form-field-header">
+                  Изготовлено
+                </div>
+                <mat-form-field class="width-100">
+                  <input matInput [matDatepicker]="created" formControlName="created">
+                  <mat-datepicker-toggle matSuffix [for]="created"></mat-datepicker-toggle>
+                  <mat-datepicker #created></mat-datepicker>
+                </mat-form-field>
+              </div>
+              <div class="form-field">
+                <div class="form-field-header">
+                  Срок годности
+                </div>
+                <mat-form-field class="width-100">
+                  <input matInput [matDatepicker]="shelf" formControlName="shelf">
+                  <mat-datepicker-toggle matSuffix [for]="shelf"></mat-datepicker-toggle>
+                  <mat-datepicker #shelf></mat-datepicker>
+                </mat-form-field>
+              </div>
+              <div class="form-field">
+                <div class="form-field-header">
+                  Убрано
+                </div>
+                <mat-form-field class="width-100">
+                  <input matInput [matDatepicker]="moved" formControlName="moved">
+                  <mat-datepicker-toggle matSuffix [for]="moved"></mat-datepicker-toggle>
+                  <mat-datepicker #moved></mat-datepicker>
+                </mat-form-field>
+              </div>
+            </form>
+          </div>
+          <div class="block-footer add-button" (click)="addProduct(p)">
+            Добавить
+          </div>
+        </div>
+      </ng-container>
+    </ng-template>
+  </div>
+</div>

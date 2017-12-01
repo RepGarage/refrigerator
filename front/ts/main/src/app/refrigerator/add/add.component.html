@@ -1,0 +1,15 @@
+<div class="modal" (click)="fadeToBlack()"></div>
+<div class="pop-up">
+    <div class="block-header">
+        Добавить холодильник
+    </div>
+    <div class="block-body bg-white">
+        <form [formGroup]="fGroup">
+            <label >Название</label>
+            <input formControlName="name" class="input">
+        </form>
+    </div>
+    <div class="block-footer positive pointer" (click)="addRefrigerator()">
+        Добавить
+    </div>
+</div>

@@ -1,0 +1,23 @@
+<div class="content">
+  <div class="block-header header" >
+      <p class="title" [@titleState]="titleState" (click)="onHeaderTitleClick()" >Мои холодильники</p>
+      <div class="ref-zone" [@refZoneState]="refZoneState">
+        <ng-container *ngIf="selectedRefrigerator; let ref">
+            <p>{{ ref.name }}</p>
+        </ng-container>
+      </div>
+    </div>
+    <div class="refrigerators-markup" [@expandState]="expandState">
+      <!-- LIST -->
+      <app-list-refrigerators
+      [refrigerators]="refrigerators"
+      (onRefrigeratorClick)="onRefrigeratorClick($event)"
+      [expandState]="expandState" ></app-list-refrigerators>
+      <div class="products-area">
+        <router-outlet name="products"></router-outlet>
+      </div>
+    </div>
+    <ng-container *ngIf="(addRefrigeratorActive | async)">
+      <app-add-refrigerator></app-add-refrigerator>
+    </ng-container>
+</div>

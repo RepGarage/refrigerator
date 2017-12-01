@@ -1,0 +1,20 @@
+<div class="header">
+    <div class="title">Refrigerator control</div>
+    <span class="credentials" *ngIf="authState | async">
+      <div>
+          Добро пожаловать, {{ (authState | async)?.displayName }} !
+          <span (click)="logout()" >
+                  Выйти
+          </span>
+      </div>
+    </span>
+</div>
+<div class="main" [@selectedProductState]="selectedProductState" >
+  <div class="refrigerators">
+    <router-outlet></router-outlet>
+  </div>
+</div>
+
+
+
+

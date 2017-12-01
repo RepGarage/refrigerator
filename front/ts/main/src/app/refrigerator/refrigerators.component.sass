@@ -1,0 +1,26 @@
+\:host
+  box-shadow: 2px 5px 7px, -2px -5px 7px
+  height: auto
+
+p
+  margin: 0
+
+.header
+  display: grid
+  grid-template-columns: 30% 50% 1fr
+  grid-template-areas: 'left central right'
+  .title
+    font-size: 2em
+    align-self: center
+    text-align: center
+    grid-area: central
+    cursor: pointer
+  .ref-zone
+    font-size: 2em
+.refrigerators-markup
+  router-outlet
+    display: none
+  display: grid
+  grid-template-columns: 1fr
+.extended
+  grid-template-columns: 35% 1fr

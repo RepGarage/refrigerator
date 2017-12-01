@@ -1,0 +1,13 @@
+<div class="products-list" >
+    <div class="add-product-placeholder" (click)="triggerAddProduct()">
+        <img src="/assets/icons/ic_add_black.svg" >
+    </div>
+    <ng-container *ngIf="(products | async)?.length > 0;">
+        <ng-container *ngFor="let product of products | async">
+            <div class="list-group-item"
+            (click)="select(product)"> 
+                <app-prod-list-unit [product]="product"></app-prod-list-unit> 
+            </div>
+        </ng-container>
+    </ng-container>
+</div>
