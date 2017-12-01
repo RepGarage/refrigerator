@@ -145,8 +145,8 @@ export class ProductService {
 
   fetchProductImageFromAPI(p: Product, side: number): Observable<string> {
     return this.$http.get(
-      `http://127.0.0.1:8080/api/product?product_id=${p.product_id}&side=${side}`)
-      .map((response: { photoUrl: string}) => <string>response.photoUrl)
+      `http://127.0.0.1:8080/api/get/product/image?product_id=${p.product_id}&side=${side}`)
+      .map((response: { result: string}) => <string>response.result)
       .catch(() => Observable.of(null));
   }
 
