@@ -83,7 +83,7 @@ func (p PerekrestokInterface) GetProductImageFromAPI(side string, productID inte
 	case string:
 		id = v
 	}
-	r, e := http.Get(productImageBaseURL + "api/1.0/partner/" + partnerID + "/item/" + id + "/picture/?format=jpg&width=" + side + "&height=" + side + "&scale=both&encoding=binary")
+	r, e := http.Get(productImageBaseURL + "partner/" + partnerID + "/item/" + id + "/picture/?format=jpg&width=" + side + "&height=" + side + "&scale=both&encoding=binary")
 	if e != nil {
 		return "", e
 	}
