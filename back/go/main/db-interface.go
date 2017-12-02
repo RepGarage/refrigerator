@@ -1,7 +1,7 @@
 package main
 
 import (
-	"bitbucket.org/ngoncharov/refrigerator/db"
+	"./db"
 	"gopkg.in/mgo.v2"
 )
 

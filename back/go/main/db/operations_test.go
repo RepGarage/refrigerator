@@ -1,9 +1,7 @@
-package db_test
+package db
 
 import (
 	"testing"
-
-	"bitbucket.org/ngoncharov/refrigerator/db"
 
 	"gopkg.in/mgo.v2"
 )
@@ -15,11 +13,11 @@ func TestInsert(t *testing.T) {
 	if e != nil {
 		t.Error(e)
 	}
-	var testProduct = db.Product{
+	var testProduct = Product{
 		Name:      "Product",
 		ProductID: 1,
 	}
-	err := db.Insert(testProduct, sess, dbName)
+	err := Insert(testProduct, sess, dbName)
 	if err != nil {
 		t.Error(err)
 	}
@@ -34,15 +32,15 @@ func TestFindProductByID(t *testing.T) {
 	if e != nil {
 		t.Error(e)
 	}
-	var testProduct = db.Product{
+	var testProduct = Product{
 		Name:      "Product",
 		ProductID: 1,
 	}
-	err := db.Insert(testProduct, sess, dbName)
+	err := Insert(testProduct, sess, dbName)
 	if err != nil {
 		t.Error(err)
 	}
-	p, err := db.FindProductByID(testProduct.ProductID, sess, dbName)
+	p, err := FindProductByID(testProduct.ProductID, sess, dbName)
 	if err != nil {
 		t.Error(err)
 	}
@@ -62,11 +60,11 @@ func BenchmarkInsert(b *testing.B) {
 		b.Error(e)
 	}
 	for i := 0; i < b.N; i++ {
-		var testProduct = db.Product{
+		var testProduct = Product{
 			Name:      "Product",
 			ProductID: i,
 		}
-		err := db.Insert(testProduct, sess, dbName)
+		err := Insert(testProduct, sess, dbName)
 		if err != nil {
 			b.Error(err)
 		}
