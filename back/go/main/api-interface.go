@@ -8,7 +8,7 @@ import (
 	"os"
 	"strconv"
 
-	"bitbucket.org/ngoncharov/refrigerator/db"
+	"./db"
 )
 
 var (
