@@ -17,8 +17,8 @@ var (
 	partnerID           = os.Getenv("PARTNER_ID")
 )
 
-// PerekrestokInterface api calls
-type PerekrestokInterface struct{}
+// ApiInterface api calls
+type ApiInterface struct{}
 
 // ProductsResponse type response
 type ProductsResponse struct {
@@ -34,7 +34,7 @@ type ResponseProduct struct {
 }
 
 // GetProducts return products object
-func (p PerekrestokInterface) GetProducts(name string) ([]db.Product, error) {
+func (p ApiInterface) GetProducts(name string) ([]db.Product, error) {
 	r, err := http.Get(productsBaseURL + "prompt?text=" + name)
 	if err != nil {
 		return []db.Product{}, err
@@ -73,7 +73,7 @@ func convertProductsResponseToProducts(r ProductsResponse) []db.Product {
 }
 
 // GetProductImageFromAPI returns image of product
-func (p PerekrestokInterface) GetProductImageFromAPI(side string, productID interface{}) (string, error) {
+func (p ApiInterface) GetProductImageFromAPI(side string, productID interface{}) (string, error) {
 	var id string
 	switch v := productID.(type) {
 	case int:

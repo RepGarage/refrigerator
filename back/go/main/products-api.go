@@ -6,7 +6,7 @@ import "encoding/json"
 // ProductsAPI type
 type ProductsAPI struct{}
 
-var perekrestokInterface PerekrestokInterface
+var apiInterface ApiInterface
 
 // GetProductsHandler func
 func (p *ProductsAPI) GetProductsHandler(w http.ResponseWriter, r *http.Request) {
@@ -17,7 +17,7 @@ func (p *ProductsAPI) GetProductsHandler(w http.ResponseWriter, r *http.Request)
 		w.WriteHeader(400)
 		return
 	}
-	products, err := perekrestokInterface.GetProducts(name)
+	products, err := apiInterface.GetProducts(name)
 	if err != nil {
 		w.WriteHeader(500)
 		return
@@ -46,7 +46,7 @@ func (p *ProductsAPI) GetProductImageHandler(w http.ResponseWriter, r *http.Requ
 		side = "100"
 	}
 
-	image, err := perekrestokInterface.GetProductImageFromAPI(side, productID)
+	image, err := apiInterface.GetProductImageFromAPI(side, productID)
 	if err != nil {
 		w.WriteHeader(500)
 		return
