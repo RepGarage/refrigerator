@@ -1,0 +1,74 @@
+Request starting HTTP/1.1 GET http://localhost:50827/  
+Request finished in 202.6862ms 404 
+Request starting HTTP/1.1 GET http://localhost:50827/api/shelflife?productId=4789553&url=https://www.perekrestok.ru/catalog/moloko-syr-yaytsa/syry/tender-syr-rossiyskiy-1kg--304011  
+Executing action method IceBoxApp.Controllers.ShelfLifeController.GetAsync (IceBoxApp) with arguments (4789553, https://www.perekrestok.ru/catalog/moloko-syr-yaytsa/syry/tender-syr-rossiyskiy-1kg--304011) - ModelState is Valid
+Executing HttpStatusCodeResult, setting HTTP status code 500
+Executed action IceBoxApp.Controllers.ShelfLifeController.GetAsync (IceBoxApp) in 11054.8777ms
+Request finished in 13630.0028ms 500 
+Request starting HTTP/1.1 GET http://localhost:50827/api/shelflife?productId=47898553&url=https://www.perekrestok.ru/catalog/moloko-syr-yaytsa/syry/tender-syr-rossiyskiy-1kg--304011  
+Executing action method IceBoxApp.Controllers.ShelfLifeController.GetAsync (IceBoxApp) with arguments (47898553, https://www.perekrestok.ru/catalog/moloko-syr-yaytsa/syry/tender-syr-rossiyskiy-1kg--304011) - ModelState is Valid
+Executing JsonResult, writing value IceBoxApp.Models.ShelfLife.
+Executed action IceBoxApp.Controllers.ShelfLifeController.GetAsync (IceBoxApp) in 5707.2076ms
+Request finished in 5722.4571ms 200 application/json; charset=utf-8
+Request starting HTTP/1.1 GET http://localhost:50827/  
+Request finished in 268.9102ms 404 
+Request starting HTTP/1.1 GET http://localhost:50827/favicon.ico  
+Request finished in 4.8664ms 404 
+Request starting HTTP/1.1 GET http://localhost:50827/api/shelflife?productId=478988553&url=https://www.perekrestok.ru/catalog/moloko-syr-yaytsa/syry/tender-syr-rossiyskiy-1kg--304011  
+Executing action method IceBoxApp.Controllers.ShelfLifeController.GetAsync (Main) with arguments (478988553, https://www.perekrestok.ru/catalog/moloko-syr-yaytsa/syry/tender-syr-rossiyskiy-1kg--304011) - ModelState is Valid
+Executing JsonResult, writing value IceBoxApp.Models.ShelfLife.
+Executed action IceBoxApp.Controllers.ShelfLifeController.GetAsync (Main) in 21873.7165ms
+Request finished in 22014.4643ms 200 application/json; charset=utf-8
+Request starting HTTP/1.1 GET http://localhost:50827/  
+Request finished in 167.1476ms 404 
+Request starting HTTP/1.1 GET http://localhost:50827/favicon.ico  
+Request finished in 4.2986ms 404 
+Request starting HTTP/1.1 GET http://localhost:50827/api/shelflife?productId=478988553&url=https://www.perekrestok.ru/catalog/moloko-syr-yaytsa/syry/tender-syr-rossiyskiy-1kg--304011  
+Executing action method IceBoxApp.Controllers.ShelfLifeController.GetAsync (Main) with arguments (478988553, https://www.perekrestok.ru/catalog/moloko-syr-yaytsa/syry/tender-syr-rossiyskiy-1kg--304011) - ModelState is Valid
+Executing HttpStatusCodeResult, setting HTTP status code 500
+Executed action IceBoxApp.Controllers.ShelfLifeController.GetAsync (Main) in 656.7238ms
+Request finished in 751.8119ms 500 
+Request starting HTTP/1.1 GET http://localhost:50827/api/shelflife?productId=47896788553&url=https://www.perekrestok.ru/catalog/moloko-syr-yaytsa/syry/tender-syr-rossiyskiy-1kg--304011  
+Executing action method IceBoxApp.Controllers.ShelfLifeController.GetAsync (Main) with arguments (0, https://www.perekrestok.ru/catalog/moloko-syr-yaytsa/syry/tender-syr-rossiyskiy-1kg--304011) - ModelState is Invalid
+Executing HttpStatusCodeResult, setting HTTP status code 400
+Executed action IceBoxApp.Controllers.ShelfLifeController.GetAsync (Main) in 43.3294ms
+Request finished in 53.7449ms 400 
+Request starting HTTP/1.1 GET http://localhost:50827/api/shelflife?productId=478967688553&url=https://www.perekrestok.ru/catalog/moloko-syr-yaytsa/syry/tender-syr-rossiyskiy-1kg--304011  
+Executing action method IceBoxApp.Controllers.ShelfLifeController.GetAsync (Main) with arguments (0, https://www.perekrestok.ru/catalog/moloko-syr-yaytsa/syry/tender-syr-rossiyskiy-1kg--304011) - ModelState is Invalid
+Executing HttpStatusCodeResult, setting HTTP status code 400
+Executed action IceBoxApp.Controllers.ShelfLifeController.GetAsync (Main) in 32.8186ms
+Request finished in 41.9969ms 400 
+Request starting HTTP/1.1 GET http://localhost:50827/api/shelflife?productId=478688553&url=https://www.perekrestok.ru/catalog/moloko-syr-yaytsa/syry/tender-syr-rossiyskiy-1kg--304011  
+Executing action method IceBoxApp.Controllers.ShelfLifeController.GetAsync (Main) with arguments (478688553, https://www.perekrestok.ru/catalog/moloko-syr-yaytsa/syry/tender-syr-rossiyskiy-1kg--304011) - ModelState is Valid
+Executing JsonResult, writing value IceBoxApp.Models.ShelfLife.
+Executed action IceBoxApp.Controllers.ShelfLifeController.GetAsync (Main) in 845.4598ms
+Request finished in 856.7356ms 200 application/json; charset=utf-8
+Request starting HTTP/1.1 GET http://localhost:50827/api/shelflife?productId=478553&url=https://www.perekrestok.ru/catalog/moloko-syr-yaytsa/syry/tender-syr-rossiyskiy-1kg--304011  
+Executing action method IceBoxApp.Controllers.ShelfLifeController.GetAsync (Main) with arguments (478553, https://www.perekrestok.ru/catalog/moloko-syr-yaytsa/syry/tender-syr-rossiyskiy-1kg--304011) - ModelState is Valid
+Executing JsonResult, writing value IceBoxApp.Models.ShelfLife.
+Executed action IceBoxApp.Controllers.ShelfLifeController.GetAsync (Main) in 724.3596ms
+Request finished in 733.3552ms 200 application/json; charset=utf-8
+Request starting HTTP/1.1 GET http://localhost:50827/api/shelflife?productId=4553&url=https://www.perekrestok.ru/catalog/moloko-syr-yaytsa/syry/tender-syr-rossiyskiy-1kg--304011  
+Executing action method IceBoxApp.Controllers.ShelfLifeController.GetAsync (Main) with arguments (4553, https://www.perekrestok.ru/catalog/moloko-syr-yaytsa/syry/tender-syr-rossiyskiy-1kg--304011) - ModelState is Valid
+Executing HttpStatusCodeResult, setting HTTP status code 500
+Executed action IceBoxApp.Controllers.ShelfLifeController.GetAsync (Main) in 141.5801ms
+Request finished in 150.7338ms 500 
+Request starting HTTP/1.1 GET http://localhost:50827/api/shelflife?productId=123&url=https://www.perekrestok.ru/catalog/moloko-syr-yaytsa/syry/tender-syr-rossiyskiy-1kg--304011  
+Executing action method IceBoxApp.Controllers.ShelfLifeController.GetAsync (Main) with arguments (123, https://www.perekrestok.ru/catalog/moloko-syr-yaytsa/syry/tender-syr-rossiyskiy-1kg--304011) - ModelState is Valid
+Executing JsonResult, writing value IceBoxApp.Models.ShelfLife.
+Executed action IceBoxApp.Controllers.ShelfLifeController.GetAsync (Main) in 649.8ms
+Request finished in 658.857ms 200 application/json; charset=utf-8
+Request starting HTTP/1.1 GET http://localhost:50827/api/shelflife?productId=1231&url=https://www.perekrestok.ru/catalog/moloko-syr-yaytsa/syry/tender-syr-rossiyskiy-1kg--304011  
+Executing action method IceBoxApp.Controllers.ShelfLifeController.GetAsync (Main) with arguments (1231, https://www.perekrestok.ru/catalog/moloko-syr-yaytsa/syry/tender-syr-rossiyskiy-1kg--304011) - ModelState is Valid
+Executing JsonResult, writing value IceBoxApp.Models.ShelfLife.
+Executed action IceBoxApp.Controllers.ShelfLifeController.GetAsync (Main) in 656.4012ms
+Request finished in 666.3069ms 200 application/json; charset=utf-8
+Request starting HTTP/1.1 GET http://localhost:50827/  
+Request finished in 161.3687ms 404 
+Request starting HTTP/1.1 GET http://localhost:50827/favicon.ico  
+Request finished in 4.2944ms 404 
+Request starting HTTP/1.1 GET http://localhost:50827/api/shelflife?productId=11&url=https://www.perekrestok.ru/catalog/moloko-syr-yaytsa/syry/tender-syr-rossiyskiy-1kg--304011  
+Executing action method MainApp.Controllers.ShelfLifeController.GetAsync (Main) with arguments (11, https://www.perekrestok.ru/catalog/moloko-syr-yaytsa/syry/tender-syr-rossiyskiy-1kg--304011) - ModelState is Valid
+Executing JsonResult, writing value MainApp.Models.ShelfLife.
+Executed action MainApp.Controllers.ShelfLifeController.GetAsync (Main) in 1446.9791ms
+Request finished in 1529.5254ms 200 application/json; charset=utf-8

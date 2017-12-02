@@ -1,0 +1,13 @@
+C:\Users\lop_1\source\repos\IceBoxApp\IceBoxApp\bin\Debug\netcoreapp2.0\IceBoxApp.deps.json
+C:\Users\lop_1\source\repos\IceBoxApp\IceBoxApp\bin\Debug\netcoreapp2.0\IceBoxApp.runtimeconfig.json
+C:\Users\lop_1\source\repos\IceBoxApp\IceBoxApp\bin\Debug\netcoreapp2.0\IceBoxApp.runtimeconfig.dev.json
+C:\Users\lop_1\source\repos\IceBoxApp\IceBoxApp\bin\Debug\netcoreapp2.0\IceBoxApp.dll
+C:\Users\lop_1\source\repos\IceBoxApp\IceBoxApp\obj\Debug\netcoreapp2.0\IceBoxApp.csprojResolveAssemblyReference.cache
+C:\Users\lop_1\source\repos\IceBoxApp\IceBoxApp\obj\Debug\netcoreapp2.0\IceBoxApp.csproj.CoreCompileInputs.cache
+C:\Users\lop_1\source\repos\IceBoxApp\IceBoxApp\obj\Debug\netcoreapp2.0\IceBoxApp.AssemblyInfoInputs.cache
+C:\Users\lop_1\source\repos\IceBoxApp\IceBoxApp\obj\Debug\netcoreapp2.0\IceBoxApp.AssemblyInfo.cs
+C:\Users\lop_1\source\repos\IceBoxApp\IceBoxApp\bin\Debug\netcoreapp2.0\IceBoxApp.pdb
+C:\Users\lop_1\source\repos\IceBoxApp\IceBoxApp\obj\Debug\netcoreapp2.0\IceBoxApp.dll
+C:\Users\lop_1\source\repos\IceBoxApp\IceBoxApp\obj\Debug\netcoreapp2.0\IceBoxApp.pdb
+C:\Users\lop_1\source\repos\IceBoxApp\IceBoxApp\bin\Debug\netcoreapp2.0\Logging.dll
+C:\Users\lop_1\source\repos\IceBoxApp\IceBoxApp\bin\Debug\netcoreapp2.0\Logging.pdb
