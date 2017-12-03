@@ -10,4 +10,4 @@ matrix:
       - ln -s $GOPATH/src/github.com/RepGarage/go
       - cd back/go/main && ./install-deps.sh
 
-    script: cd back/go/main && go test -cover
+    script: go test -cover
