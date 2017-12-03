@@ -1,14 +1,15 @@
 matrix:
-  language: go
-  
-  go:
-    - 1.9.2
+  include:
+    language: go
 
-  install: 
-    - mkdir -p $GOPATH/src/github.com/RepGarage
-    - ln -s $GOPATH/src/github.com/RepGarage/go
-    - go get github.com/stretchr/testify/assert                       
-    - go get gopkg.in/h2non/gock.v1
-    - go get gopkg.in/mgo.v2
+    go:
+      - 1.9.2
 
-  script: cd back/go/main && go test -cover
+    install: 
+      - mkdir -p $GOPATH/src/github.com/RepGarage
+      - ln -s $GOPATH/src/github.com/RepGarage/go
+      - go get github.com/stretchr/testify/assert                       
+      - go get gopkg.in/h2non/gock.v1
+      - go get gopkg.in/mgo.v2
+
+    script: cd back/go/main && go test -cover
