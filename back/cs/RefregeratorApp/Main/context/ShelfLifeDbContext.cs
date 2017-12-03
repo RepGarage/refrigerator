@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace MainApp.context
 {
-    public class ShelfLifDbContext
+    public class ShelfLifeDbContext
     {
         IMongoDatabase database;
         IGridFSBucket gridFS;  
 
-        public ShelfLifDbContext()
+        public ShelfLifeDbContext()
         {
             string connectionString = "mongodb://localhost:27017/icebox";
             var connection = new MongoUrlBuilder(connectionString);
