@@ -1,8 +1,9 @@
 package main
 
 import (
-	"./db"
 	"gopkg.in/mgo.v2"
+
+	"github.com/RepGarage/refrigerator/back/go/main/db"
 )
 
 // Db database struct
