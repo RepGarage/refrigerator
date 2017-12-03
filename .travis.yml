@@ -15,11 +15,11 @@ matrix:
       after_success: ./deploy-docker.sh
 
     - language: javascript
-  
+
       script: front/ts/main/deploy-docker.sh
-	  
+
     - language: csharp
-	
+
       mono: none
       dotnet: 2.0.0
       script:
