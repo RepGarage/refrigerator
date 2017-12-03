@@ -30,5 +30,5 @@ func (s *Server) Serve() {
 		log.Printf("%v %v", r.Method, r.URL.Path)
 		productsAPI.GetProductImageHandler(w, r)
 	})
-	http.ListenAndServe(s.port, s.mux)
+	log.Fatal(http.ListenAndServe(s.port, s.mux))
 }
