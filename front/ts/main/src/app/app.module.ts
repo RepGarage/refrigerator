@@ -56,7 +56,11 @@ import { AuthService } from './accounting/auth.service';
   providers: [
     ProductService,
     AuthService,
-    AppService
+    AppService,
+    {
+      provide: 'PRODUCTS_BASE_URL',
+      useValue: environment.productsBaseApi
+    }
   ],
   bootstrap: [AppComponent]
 })
