@@ -8,6 +8,8 @@ namespace MainApp.Models
 {
     public class ShelfLife
     {
+        [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
+        public string Id { get; set; }
         [BsonElement("product_id")]
         public int  ProductId { get; set; }
         [BsonElement("type")]
