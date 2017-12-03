@@ -1,0 +1,11 @@
+services:
+  main:
+    build:
+      context: D:\Refrigerator\refrigerator\back\cs\RefregeratorApp\Main
+      dockerfile: Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+    image: main
+    ports:
+    - 80/tcp
+version: '3.0'
