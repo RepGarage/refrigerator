@@ -17,3 +17,12 @@ matrix:
     - language: javascript
   
       script: front/ts/main/deploy-docker.sh
+	  
+    - language: csharp
+	
+	  mono: none
+	  dotnet: 2.0.0
+	  script:
+		- dotnet restore
+	    - dotnet build  ./back/cs/RefregeratorApp/Main.sln
+	    - dotnet test ./back/cs/RefregeratorApp/Main.Tests
