@@ -1,9 +1,14 @@
 package main
 
 import (
-	"./db"
+	"os"
+
 	"gopkg.in/mgo.v2"
+
+	"github.com/RepGarage/refrigerator/back/go/main/db"
 )
+
+var mongoURL = os.Getenv("MONGO_URL")
 
 // Db database struct
 type Db struct {
@@ -13,7 +18,7 @@ type Db struct {
 
 // Connect create connection
 func (d *Db) Connect() error {
-	session, error := mgo.Dial("localhost")
+	session, error := mgo.Dial(mongoURL)
 	if error != nil {
 		return error
 	}

@@ -1,7 +1,7 @@
 import { RefrigeratorService } from './../refrigerator/refrigerator.service';
 import { User } from './../accounting/user/user.class';
 import { Refrigerator } from './../refrigerator/refrigerator';
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { Http } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
@@ -31,7 +31,8 @@ export class ProductService {
       private $afd: AngularFireDatabase,
       private $auth: AuthService,
       private $refService: RefrigeratorService,
-      private $http: HttpClient
+      private $http: HttpClient,
+      @Inject('PRODUCTS_BASE_URL') private productsBaseUrl: string
   ) {
     this.$auth.fetchSession()
       .subscribe((u: User) => {
@@ -132,7 +133,7 @@ export class ProductService {
 
   fetchProductsListFromApi(name: string): Observable<Array<Product>> {
     return this.$http.get(
-      `http://127.0.0.1:8080/api/get/products?name=${name}`
+      `${this.productsBaseUrl}api/get/products?name=${name}`
     ).map((r: Array<Product>) => {
       r = r.map(v => {
         v.product_id = v.product_id.toString();
@@ -145,7 +146,7 @@ export class ProductService {
 
   fetchProductImageFromAPI(p: Product, side: number): Observable<string> {
     return this.$http.get(
-      `http://127.0.0.1:8080/api/get/product/image?product_id=${p.product_id}&side=${side}`)
+      `${this.productsBaseUrl}api/get/product/image?product_id=${p.product_id}&side=${side}`)
       .map((response: { result: string}) => <string>response.result)
       .catch(() => Observable.of(null));
   }

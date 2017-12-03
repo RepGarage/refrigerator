@@ -8,7 +8,7 @@ import (
 	"os"
 	"strconv"
 
-	"./db"
+	"github.com/RepGarage/refrigerator/back/go/main/db"
 )
 
 var (

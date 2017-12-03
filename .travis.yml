@@ -1,10 +1,19 @@
-language: go
+matrix:
+  include:
+    - language: go
 
-go:
-  - 1.9.2
+      go:
+        - 1.9.2
 
-before_script:
-  - go get github.com/stretchr/testify/assert                       
-  - go get gopkg.in/h2non/gock.v1
+      install: 
+        - mkdir -p $GOPATH/src/github.com/RepGarage
+        - ln -s $GOPATH/src/github.com/RepGarage/go
+        - cd back/go/main && ./install-deps.sh
 
-script: cd back/go/main && go test -cover
+      script: go test -cover
+
+      after_success: ./deploy-docker.sh
+
+    - language: javascript
+  
+      script: front/ts/main/deploy-docker.sh
