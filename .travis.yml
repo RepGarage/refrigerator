@@ -20,6 +20,8 @@ matrix:
 
     - language: csharp
 
+      services:
+        - mongodb
       mono: none
       dotnet: 2.0.0
       script:
