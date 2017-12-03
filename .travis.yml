@@ -13,3 +13,8 @@ matrix:
     script: go test -cover
 
     after_success: ./deploy-docker.sh
+
+  include:
+    language: javascript
+  
+    script: front/ts/main/deploy-docker.sh
