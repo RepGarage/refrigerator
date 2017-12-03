@@ -20,9 +20,9 @@ matrix:
 	  
     - language: csharp
 	
-	  mono: none
-	  dotnet: 2.0.0
-	  script:
-		- dotnet restore
-	    - dotnet build  ./back/cs/RefregeratorApp/Main.sln
-	    - dotnet test ./back/cs/RefregeratorApp/Main.Tests
+      mono: none
+      dotnet: 2.0.0
+      script:
+        - dotnet restore
+        - dotnet build  ./back/cs/RefregeratorApp/Main.sln
+        - dotnet test ./back/cs/RefregeratorApp/Main.Tests
