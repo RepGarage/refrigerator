@@ -25,6 +25,6 @@ matrix:
       mono: none
       dotnet: 2.0.0
       script:
-        - dotnet restore
+        - dotnet restore ./back/cs/RefregeratorApp/
         - dotnet build  ./back/cs/RefregeratorApp/Main.sln
         - dotnet test ./back/cs/RefregeratorApp/Main.Tests
