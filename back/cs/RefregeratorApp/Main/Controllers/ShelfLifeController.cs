@@ -16,12 +16,13 @@ namespace MainApp.Controllers
     [Route("api/[controller]")]
     public class ShelfLifeController : Controller
     {
-        private readonly ShelfLifDbContext db = new ShelfLifDbContext();
+        private readonly ShelfLifeDbContext db = new ShelfLifeDbContext();
 
         [HttpGet]
         public async Task<ActionResult> GetAsync(int productId, string url)
         {
-            if (String.IsNullOrEmpty(url))
+  
+            if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
@@ -43,22 +44,29 @@ namespace MainApp.Controllers
                 return StatusCode(500);
             }
 
-            string html = await GetExpDateAsync(url);
-            var doc = new HtmlDocument();
-            doc.LoadHtml(html);
-         
-            var links = doc.DocumentNode.SelectNodes("//td[@class='xf-product-table__col']").Last().InnerText.Trim();
-            var data = Convert.ToInt32(Regex.Match(links, @"\d+").Value); 
-            var newProduct = new ShelfLife { ProductId = productId, Data = data, Type = DateTypeHelper.GetDateType(links)  };
             try
             {
-                await db.Create(newProduct);
+                string html = await GetExpDateAsync(url);
+                var doc = new HtmlDocument();
+                doc.LoadHtml(html);
+
+                var links = doc.DocumentNode.SelectNodes("//td[@class='xf-product-table__col']").Last().InnerText.Trim();
+                var data = Convert.ToInt32(Regex.Match(links, @"\d+").Value);
+                var newProduct = new ShelfLife { ProductId = productId, Data = data, Type = DateTypeHelper.GetDateType(links) };
+                try
+                {
+                    await db.Create(newProduct);
+                }
+                catch
+                {
+                    return StatusCode(500);
+                }
+                return Json(newProduct);
             }
             catch
             {
-                return StatusCode(500);
+                return BadRequest();
             }
-            return Json(newProduct);
         }
 
         [HttpDelete]
