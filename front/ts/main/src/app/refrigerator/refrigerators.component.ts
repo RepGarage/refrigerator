@@ -64,6 +64,7 @@ export class RefrigeratorsComponent implements OnInit, AfterViewChecked, OnDestr
       this.$rs.selectRefrigerator(this.$route.snapshot.data['selectedRefrigerator']);
       this.$rs.selectedRefrigerator.subscribe((r: Refrigerator) => this.selectedRefrigerator = r);
       this.addRefrigeratorActive = this.$rs.addRefrigeratorActive;
+      this.refrigerators.subscribe(console.log);
     }
 
     /**

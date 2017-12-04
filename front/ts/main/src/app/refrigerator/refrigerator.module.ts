@@ -1,3 +1,4 @@
+import { RefUnitComponent } from './unit/unit.component';
 import { NgModule } from '@angular/core';
 import { RefrigeratorsComponent } from './refrigerators.component';
 import { RefrigeratorService } from './refrigerator.service';
@@ -13,7 +14,8 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
     declarations: [
         RefrigeratorsComponent,
         AddRefrigeratorComponent,
-        RefrigeratorsListComponent
+        RefrigeratorsListComponent,
+        RefUnitComponent
     ],
     imports: [
         FormsModule,
