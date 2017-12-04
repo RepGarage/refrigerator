@@ -1,18 +1,49 @@
-<div class="header">
-    <div class="title">Refrigerator control</div>
-    <span class="credentials" *ngIf="authState | async">
-      <div>
-          Добро пожаловать, {{ (authState | async)?.displayName }} !
-          <span (click)="logout()" >
-                  Выйти
-          </span>
+<!-- <div class="navbar is-warning">
+    <div class="navbar-brand">
+      <div class="navbar-item">
+        <a class="is-size-3">Refrigerator control</a>
       </div>
-    </span>
+    </div>
+    <div class="navbar-menu">
+      <div class="navbar-end">
+        <ng-container *ngIf="(authState | async); let auth">
+          <div class="navbar-item">
+            <img [src]="auth.photoURL" alt="avatar">
+          </div>
+          <div class="navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link">
+              {{ auth.displayName }}
+            </a>
+
+            <div class="navbar-dropdown">
+              <a class="navbar-item" (click)="logout()">
+                Выйти
+              </a>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
 </div>
-<div class="main" [@selectedProductState]="selectedProductState" >
-  <div class="refrigerators">
-    <router-outlet></router-outlet>
-  </div>
+<div class="container">
+  <router-outlet></router-outlet>
+</div> -->
+
+<mat-toolbar color="accent">
+  <span>Refrigerator Control</span>
+  <div class="header-spacer"></div>
+  <ng-container *ngIf="(authState | async); let auth">
+    <span>{{ auth.displayName }}</span>
+    <button mat-icon-button [matMenuTriggerFor]="appMenu">
+       <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #appMenu="matMenu">
+      <button mat-menu-item (click)="logout()"> Выйти </button>
+    </mat-menu>
+  </ng-container>
+</mat-toolbar>
+<div class="content">
+  <router-outlet></router-outlet>
 </div>
 
 

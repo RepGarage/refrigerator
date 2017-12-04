@@ -5,51 +5,12 @@ import { IRefrigerator, Refrigerator } from './refrigerator';
 import { RefrigeratorService } from './refrigerator.service';
 import { Routes, ActivatedRoute, Router } from '@angular/router';
 import { AngularFireObject } from 'angularfire2/database';
-import {
-  trigger,
-  state,
-  style,
-  animate,
-  transition,
-  keyframes
-} from '@angular/animations';
 
 @Component({
     selector: 'app-refrigerators',
     templateUrl: './refrigerators.component.html',
     styleUrls: [
         './refrigerators.component.sass'
-    ],
-    animations: [
-      trigger('expandState', [
-        state('minimized', style({
-          gridTemplateColumns: '100% 1fr'
-        })),
-        state('expanded', style({
-          gridTemplateColumns: '30% 1fr'
-        }))
-      ]),
-      trigger('titleState', [
-        state('minimized', style({
-          gridArea: 'central'
-        })),
-        state('expanded', style({
-          gridArea: 'left',
-          transform: 'scale(0.7)',
-          opacity: '0.7'
-        }))
-      ]),
-      trigger('refZoneState', [
-        state('invisible', style({
-          display: 'none'
-        })),
-        state('visible', style({
-          display: 'block',
-          gridArea: 'central',
-          alignSelf: 'center',
-          textAlign: 'center'
-        }))
-      ])
     ]
 })
 export class RefrigeratorsComponent implements OnInit, AfterViewChecked, OnDestroy {

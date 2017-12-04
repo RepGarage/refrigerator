@@ -21,17 +21,7 @@ import 'rxjs/add/operator/distinct';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.sass'],
-  animations: [
-    trigger('selectedProductState', [
-      state('selected', style({
-        gridTemplateRows: '70% 30%'
-      })),
-      state('none', style({
-        gridTemplateRows: '100% 1fr'
-      }))
-    ])
-  ]
+  styleUrls: ['./app.component.sass']
 })
 export class AppComponent implements OnInit {
   selectedProduct: Observable<Product>;
