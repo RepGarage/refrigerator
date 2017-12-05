@@ -4,6 +4,16 @@ branches:
 
 matrix:
   include:
-    - language: javascript
+    - language: go
 
-      script: front/ts/main/deploy-docker.sh
+      go:
+        - 1.9.2
+
+      install: 
+        - mkdir -p $GOPATH/src/github.com/RepGarage
+        - ln -s $GOPATH/src/github.com/RepGarage/go
+        - cd back/go/main && ./install-deps.sh
+
+      script: go test -cover
+
+      after_success: ./deploy-docker.sh
