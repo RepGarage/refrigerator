@@ -1,6 +1,6 @@
 branches:
   only:
-  - front/ts/main
+  - back/go/main
 
 matrix:
   include:
