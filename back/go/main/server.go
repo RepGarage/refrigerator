@@ -11,7 +11,7 @@ var productsAPI ProductsAPI
 type Server struct {
 	port string
 	mux  *http.ServeMux
-	db   *Db
+	db   *DatabaseInterface
 }
 
 // Serve serve http server

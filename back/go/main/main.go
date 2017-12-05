@@ -6,8 +6,11 @@ import (
 
 var serverPort = os.Getenv("SERVER_PORT")
 
+// DatabaseInterfaceInstance DatabaseInterface instance
+var DatabaseInterfaceInstance DatabaseInterface
+
 func main() {
-	database := Db{}
+	database := DatabaseInterfaceInstance
 	e := database.Connect()
 	if e != nil {
 		panic(e)

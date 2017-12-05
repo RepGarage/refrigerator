@@ -22,7 +22,7 @@ func (p *ProductsAPI) GetProductsHandler(w http.ResponseWriter, r *http.Request)
 		w.WriteHeader(400)
 		return
 	}
-	products, err := apiInterface.GetProducts(name)
+	products, err := apiInterface.GetProducts(&http.Client{}, name)
 	if err != nil {
 		w.WriteHeader(500)
 		return
@@ -59,7 +59,7 @@ func (p *ProductsAPI) GetProductImageHandler(w http.ResponseWriter, r *http.Requ
 	// Fetch from database
 	image, err := DatabaseInterfaceInstance.FetchPhotoFromDBByProductID(productID, side)
 	if len(image.Data) < 10 || err != nil {
-		image, err := apiInterface.GetProductImageFromAPI(side, productID)
+		image, err := apiInterface.GetProductImageFromAPI(&http.Client{}, side, productID)
 		if err != nil {
 			w.WriteHeader(500)
 			return

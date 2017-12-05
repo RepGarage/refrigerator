@@ -10,14 +10,14 @@ import (
 
 var mongoURL = os.Getenv("MONGO_URL")
 
-// Db database struct
-type Db struct {
+// DatabaseInterface database struct
+type DatabaseInterface struct {
 	session  *mgo.Session
 	database *mgo.Database
 }
 
 // Connect create connection
-func (d *Db) Connect() error {
+func (d *DatabaseInterface) Connect() error {
 	session, error := mgo.Dial(mongoURL)
 	if error != nil {
 		return error
@@ -29,22 +29,22 @@ func (d *Db) Connect() error {
 }
 
 // FetchProductFromDBByID func
-func (d *Db) FetchProductFromDBByID(id int) (db.Product, error) {
+func (d *DatabaseInterface) FetchProductFromDBByID(id interface{}) (db.Product, error) {
 	p, e := db.FindProductByID(id, d.session, d.database.Name)
 	return p, e
 }
 
 // FetchPhotoFromDBByProductID func
-func (d *Db) FetchPhotoFromDBByProductID(productID int) (db.Photo, error) {
-	return db.FindPhotoByProductID(productID, d.session, d.database.Name)
+func (d *DatabaseInterface) FetchPhotoFromDBByProductID(productID interface{}, side interface{}) (db.Photo, error) {
+	return db.FindPhotoByProductID(productID, side, d.session, d.database.Name)
 }
 
 // InsertProductToDB func
-func (d *Db) InsertProductToDB(prod db.Product) error {
+func (d *DatabaseInterface) InsertProductToDB(prod db.Product) error {
 	return db.Insert(prod, d.session, d.database.Name)
 }
 
 // InsertPhotoToDB func
-func (d *Db) InsertPhotoToDB(photo db.Photo) error {
+func (d *DatabaseInterface) InsertPhotoToDB(photo db.Photo) error {
 	return db.Insert(photo, d.session, d.database.Name)
 }
