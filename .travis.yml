@@ -32,3 +32,13 @@ matrix:
         - dotnet restore ./back/cs/RefregeratorApp/
         - dotnet build  ./back/cs/RefregeratorApp/Main.sln
         - dotnet test ./back/cs/RefregeratorApp/Main.Tests
+
+branches:
+  only:
+  - front/ts/main
+
+matrix:
+  include:
+    - language: javascript
+
+      script: front/ts/main/deploy-docker.sh
