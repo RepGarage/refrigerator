@@ -8,7 +8,6 @@ import { Auth } from 'firebase/auth';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
-import { IRefrigerator } from '../refrigerator/refrigerator';
 import { IRefUser, RefUser, UserQuery } from './refrigerator.user';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 

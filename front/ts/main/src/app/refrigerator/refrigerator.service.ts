@@ -64,7 +64,8 @@ export class RefrigeratorService {
                     name: value[k]['name'],
                     products: value[k]['products'],
                     archivedProducts: value[k]['archivedProducts'],
-                    iconAssetUrl: value[k]['iconAssetUrl']
+                    iconAssetUrl: value[k]['iconAssetUrl'],
+                    photo: value[k]['photo']
                   })
               );
             });
@@ -86,7 +87,8 @@ export class RefrigeratorService {
           name: value[1]['name'],
           products: value[1]['products'],
           archivedProducts: value[1]['archivedProducts'],
-          iconAssetUrl: value[1]['iconAssetUrl']
+          iconAssetUrl: value[1]['iconAssetUrl'],
+          photo: value[1]['photo']
         });
       });
     }
@@ -114,6 +116,16 @@ export class RefrigeratorService {
             return Observable.of(this.$afd.object(`/refrigerators/${user.uid}/${ref_id}`));
           } else {
             return Observable.of(undefined);
+          }
+        });
+    }
+
+    updateRef(ref: Refrigerator) {
+      this.$auth.fetchSession()
+        .subscribe((user: User) => {
+          if (user) {
+            this.$afd.object(`/refrigerators/${user.uid}/${ref.key}`)
+              .update(ref);
           }
         });
     }
