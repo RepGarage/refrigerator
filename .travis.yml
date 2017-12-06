@@ -1,9 +1,7 @@
 matrix:
   include:
-    - branches:
-        only:
-        - back/go/main
-
+    - if: branch = master|back/go/main
+    
       language: go
 
       go:
@@ -16,21 +14,17 @@ matrix:
         - ln -s $GOPATH/src/github.com/RepGarage/go
         - cd back/go/main && ./install-deps.sh
 
-      script: go test -cover
+      script: go test ./... -cover
 
       after_success: ./deploy-docker.sh
 
-    - branches:
-        only: 
-        - master
+    - if: branch = master|front/ts/main
     
       language: javascript
 
       script: front/ts/main/deploy-docker.sh
 
-    - branches:
-        only:
-        - master
+    - if: branch = master|back/cs/main
     
       language: csharp
 
