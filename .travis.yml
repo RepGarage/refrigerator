@@ -1,6 +1,6 @@
 matrix:
   include:
-    - if: branch = master|back/go/main
+    - if: branch =~ /master|back\/go\/main/
     
       language: go
 
@@ -18,13 +18,13 @@ matrix:
 
       after_success: ./deploy-docker.sh
 
-    - if: branch = master|front/ts/main
+    - if: branch =~ /master|front\/ts\/main/
     
       language: javascript
 
       script: front/ts/main/deploy-docker.sh
 
-    - if: branch = master|back/cs/main
+    - if: branch =~ /master|back\/cs\/main/
     
       language: csharp
 
