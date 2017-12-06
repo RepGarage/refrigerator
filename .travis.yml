@@ -8,6 +8,8 @@ matrix:
 
       go:
         - 1.9.2
+      services:
+        - mongodb
 
       install: 
         - mkdir -p $GOPATH/src/github.com/RepGarage
@@ -33,12 +35,48 @@ matrix:
         - dotnet build  ./back/cs/RefregeratorApp/Main.sln
         - dotnet test ./back/cs/RefregeratorApp/Main.Tests
 
+# Front ts main
 branches:
   only:
   - front/ts/main
 
-matrix:
-  include:
-    - language: javascript
+language: javascript
 
-      script: front/ts/main/deploy-docker.sh
+script: front/ts/main/deploy-docker.sh
+
+# Back go main
+branches:
+  only:
+  - back/go/main
+
+language: go
+
+go:
+  - 1.9.2
+services:
+  - mongodb
+
+install: 
+  - mkdir -p $GOPATH/src/github.com/RepGarage
+  - ln -s $GOPATH/src/github.com/RepGarage/go
+  - cd back/go/main && ./install-deps.sh
+
+script: go test -cover
+
+after_success: ./deploy-docker.sh
+
+# Back cs main
+branches:
+  only:
+  - back/cs/main
+
+language: csharp
+
+services:
+  - mongodb
+mono: none
+dotnet: 2.0.0
+script:
+  - dotnet restore ./back/cs/RefregeratorApp/
+  - dotnet build  ./back/cs/RefregeratorApp/Main.sln
+  - dotnet test ./back/cs/RefregeratorApp/Main.Tests
