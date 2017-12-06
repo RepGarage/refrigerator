@@ -17,8 +17,14 @@ var (
 	partnerID           = os.Getenv("PARTNER_ID")
 )
 
-// ApiInterface api calls
-type ApiInterface struct{}
+// APIInterface api calls
+type APIInterface interface {
+	GetProducts(httpClient HTTPClient, name string) ([]db.Product, error)
+	GetProductImageFromAPI(httpClient HTTPClient, side interface{}, productID interface{}) (string, error)
+}
+
+// API ApiInterface implementation
+type API struct{}
 
 // ProductsResponse type response
 type ProductsResponse struct {
@@ -33,9 +39,14 @@ type ResponseProduct struct {
 	ProductID int    `json:"product_id,omitempty"`
 }
 
+// HTTPClient interface
+type HTTPClient interface {
+	Get(string) (*http.Response, error)
+}
+
 // GetProducts return products object
-func (p ApiInterface) GetProducts(name string) ([]db.Product, error) {
-	r, err := http.Get(productsBaseURL + "prompt?text=" + name)
+func (p API) GetProducts(httpClient HTTPClient, name string) ([]db.Product, error) {
+	r, err := httpClient.Get(productsBaseURL + "prompt?text=" + name)
 	if err != nil {
 		return []db.Product{}, err
 	}
@@ -73,17 +84,27 @@ func convertProductsResponseToProducts(r ProductsResponse) []db.Product {
 }
 
 // GetProductImageFromAPI returns image of product
-func (p ApiInterface) GetProductImageFromAPI(side string, productID interface{}) (string, error) {
+func (p API) GetProductImageFromAPI(httpClient HTTPClient, side interface{}, productID interface{}) (string, error) {
 	var id string
+	var sSide string
+	// Converting
 	switch v := productID.(type) {
 	case int:
-		result := strconv.Itoa(v)
-		id = result
+		id = strconv.Itoa(v)
 		break
 	case string:
 		id = v
 	}
-	r, e := http.Get(productImageBaseURL + "partner/" + partnerID + "/item/" + id + "/picture/?format=jpg&width=" + side + "&height=" + side + "&scale=both&encoding=binary")
+	switch v := side.(type) {
+	case string:
+		sSide = v
+		break
+	case int:
+		sSide = strconv.Itoa(v)
+		break
+	}
+
+	r, e := httpClient.Get(productImageBaseURL + "partner/" + partnerID + "/item/" + id + "/picture/?format=jpg&width=" + sSide + "&height=" + sSide + "&scale=both&encoding=binary")
 	if e != nil {
 		return "", e
 	}

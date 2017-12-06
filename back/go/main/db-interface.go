@@ -10,41 +10,53 @@ import (
 
 var mongoURL = os.Getenv("MONGO_URL")
 
-// Db database struct
-type Db struct {
-	session  *mgo.Session
-	database *mgo.Database
+// DatabaseInterface database interface
+type DatabaseInterface interface {
+	Connect(string) error
+	FetchProductFromDBByID(interface{}) (db.Product, error)
+	FetchPhotoFromDBByProductID(productID interface{}, side interface{}) (db.Photo, error)
+	InsertProductToDB(prod db.Product) error
+	InsertPhotoToDB(photo db.Photo) error
+}
+
+// Database DatabaseInterface implementation
+type Database struct {
+	Session  *mgo.Session
+	Database *mgo.Database
+}
+
+type mongoInterface interface {
+	Dial(string) (*mgo.Session, error)
 }
 
 // Connect create connection
-func (d *Db) Connect() error {
+func (d *Database) Connect(dbName string) error {
 	session, error := mgo.Dial(mongoURL)
 	if error != nil {
 		return error
 	}
-	d.session = session
-	database := session.DB("refrigerator-dev")
-	d.database = database
+	d.Session = session
+	database := session.DB(dbName)
+	d.Database = database
 	return nil
 }
 
 // FetchProductFromDBByID func
-func (d *Db) FetchProductFromDBByID(id int) (db.Product, error) {
-	p, e := db.FindProductByID(id, d.session, d.database.Name)
-	return p, e
+func (d *Database) FetchProductFromDBByID(id interface{}) (db.Product, error) {
+	return db.FindProductByID(id, d.Session, d.Database.Name)
 }
 
 // FetchPhotoFromDBByProductID func
-func (d *Db) FetchPhotoFromDBByProductID(productID int) (db.Photo, error) {
-	return db.FindPhotoByProductID(productID, d.session, d.database.Name)
+func (d *Database) FetchPhotoFromDBByProductID(productID interface{}, side interface{}) (db.Photo, error) {
+	return db.FindPhotoByProductID(productID, side, d.Session, d.Database.Name)
 }
 
 // InsertProductToDB func
-func (d *Db) InsertProductToDB(prod db.Product) error {
-	return db.Insert(prod, d.session, d.database.Name)
+func (d *Database) InsertProductToDB(prod db.Product) error {
+	return db.Insert(prod, d.Session, d.Database.Name)
 }
 
 // InsertPhotoToDB func
-func (d *Db) InsertPhotoToDB(photo db.Photo) error {
-	return db.Insert(photo, d.session, d.database.Name)
+func (d *Database) InsertPhotoToDB(photo db.Photo) error {
+	return db.Insert(photo, d.Session, d.Database.Name)
 }

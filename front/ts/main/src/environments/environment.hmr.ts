@@ -1,8 +1,8 @@
 import { firebaseSecret } from './.secret';
 
 export const environment = {
-  production: true,
+  production: false,
   productsBaseApi: 'http://ref-back-main:8081/',
   firebaseSecret,
-  hmr: false
+  hmr: true
 };

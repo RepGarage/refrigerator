@@ -1,0 +1,12 @@
+<div class="card pointer">
+  <img class="card-img-top" [src]="photo" alt="Card image cap">
+  <div class="card-body">
+    <h4 class="card-title">
+      {{ ref.name }}
+    </h4>
+    <div class="card-text">
+      <p>Количество продуктов: {{ getProductsLength(ref.products) }}</p>
+    </div>
+  </div>
+</div>
+<input type="file" (change)="photoFileChanged($event)" >

@@ -2,44 +2,5 @@
   font-family: 'Main Font'
   src: url('/assets/fonts/YanoneKaffeesatz-ExtraLight.ttf')
 
-.header
-  height: 4vh
-  margin-bottom: 5px
-  box-shadow: 1px 2px 10px black
-  background-color: #ecfbc2
-  display: grid
-  grid-template-columns: 25% 50% 25%
-  grid-template-areas: "left center right"
-  .title 
-    font-family: 'Dosis-Regular'
-    grid-area: left
-    font-size: 1.7em
-    cursor: pointer
-  .credentials
-    display: flex
-    flex-direction: column
-    justify-content: center
-    justify-items: center
-    grid-area: right
-
-.main
-  height: 94vh
-  display: grid
-  grid-template-areas: '. central-main .' '. central-bottom .'
-  grid-template-rows: 70% 30%
-  @media-screen and (min-width: 1200px)
-    grid-template-columns: 20% 1fr 20%
-  @media screen and (min-width: 500px)
-    grid-template-columns: 1fr
-  @media screen and (min-width: 750px)
-    grid-template-columns: 10% 1fr 10%
-  .refrigerators
-    grid-area: central-main
-  .selected
-    grid-area: central-bottom
-
-#title
-  margin-right: 6vw
-
-span
-  cursor: pointer
+.content
+  margin-top: 4vh

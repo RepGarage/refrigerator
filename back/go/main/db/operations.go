@@ -1,6 +1,8 @@
 package db
 
 import (
+	"strconv"
+
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
@@ -18,23 +20,55 @@ func Insert(model interface{}, sess *mgo.Session, dbName string) error {
 		return e
 	default:
 		return UnknownModelError{}
+
 	}
 }
 
 // FindPhotoByProductID func
-func FindPhotoByProductID(id int, sess *mgo.Session, dbName string) (Photo, error) {
+func FindPhotoByProductID(id interface{}, side interface{}, sess *mgo.Session, dbName string) (Photo, error) {
 	cloneSess := sess.Clone()
 	defer cloneSess.Close()
 	var result Photo
-	e := cloneSess.DB(dbName).C("photos").Find(bson.M{"product_id": id}).One(&result)
+	var iID int
+	var iSide int
+	// Converts
+	switch v := id.(type) {
+	case string:
+		iID, _ = strconv.Atoi(v)
+		break
+	case int:
+		iID = v
+		break
+	}
+
+	switch v := side.(type) {
+	case string:
+		iSide, _ = strconv.Atoi(v)
+		break
+	case int:
+		iSide = v
+		break
+	}
+
+	e := cloneSess.DB(dbName).C("photos").Find(bson.M{"product_id": iID, "side": iSide}).One(&result)
 	return result, e
 }
 
 // FindProductByID func
-func FindProductByID(id int, sess *mgo.Session, dbName string) (Product, error) {
+func FindProductByID(id interface{}, sess *mgo.Session, dbName string) (Product, error) {
 	cloneSess := sess.Clone()
 	defer cloneSess.Close()
 	var result Product
-	e := cloneSess.DB(dbName).C("products").Find(bson.M{"product_id": id}).One(&result)
+	var iID int
+	// Converts
+	switch v := id.(type) {
+	case string:
+		iID, _ = strconv.Atoi(v)
+		break
+	case int:
+		iID = v
+		break
+	}
+	e := cloneSess.DB(dbName).C("products").Find(bson.M{"product_id": iID}).One(&result)
 	return result, e
 }
