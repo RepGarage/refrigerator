@@ -1,9 +1,34 @@
 branches:
   only:
-  - front/ts/main
+  - master
 
 matrix:
   include:
+    - language: go
+
+      go:
+        - 1.9.2
+
+      install: 
+        - mkdir -p $GOPATH/src/github.com/RepGarage
+        - ln -s $GOPATH/src/github.com/RepGarage/go
+        - cd back/go/main && ./install-deps.sh
+
+      script: go test -cover
+
+      after_success: ./deploy-docker.sh
+
     - language: javascript
 
       script: front/ts/main/deploy-docker.sh
+
+    - language: csharp
+
+      services:
+        - mongodb
+      mono: none
+      dotnet: 2.0.0
+      script:
+        - dotnet restore ./back/cs/RefregeratorApp/
+        - dotnet build  ./back/cs/RefregeratorApp/Main.sln
+        - dotnet test ./back/cs/RefregeratorApp/Main.Tests

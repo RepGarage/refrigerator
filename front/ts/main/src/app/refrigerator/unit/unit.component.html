@@ -1,5 +1,16 @@
 <div class="card pointer">
-  <img class="card-img-top" [src]="photo" alt="Card image cap">
+  <ng-container *ngIf="ref.photo; else noPhoto">
+    <div (click)="triggerPhotoInput()" class="photo-placeholder">
+      <img class="card-img-top" [src]="ref.photo" alt="Card image cap">
+    </div>
+  </ng-container>
+  <ng-template #noPhoto>
+    <div class="photo-placeholder flex flex-i-center bg-silver">
+      <div (click)="triggerPhotoInput()" class="flex flex-column flex-i-center w-100">
+        <mat-icon>add_a_photo</mat-icon>
+      </div>
+    </div>
+  </ng-template>
   <div class="card-body">
     <h4 class="card-title">
       {{ ref.name }}
@@ -8,5 +19,8 @@
       <p>Количество продуктов: {{ getProductsLength(ref.products) }}</p>
     </div>
   </div>
+  <div class="card-footer text-center">
+    <a class="text-primary">Выбрать</a>
+  </div>
 </div>
-<input type="file" (change)="photoFileChanged($event)" >
+<input #photoInput type="file" class="hidden" (change)="photoFileChanged($event)" >

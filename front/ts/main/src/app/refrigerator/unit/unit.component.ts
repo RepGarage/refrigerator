@@ -1,6 +1,7 @@
+import { RefrigeratorService } from './../refrigerator.service';
 import { AbstractControl, FormControl } from '@angular/forms';
 import { Refrigerator } from './../refrigerator';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, ElementRef } from '@angular/core';
 
 @Component({
   selector: 'app-ref-unit',
@@ -10,19 +11,40 @@ import { Component, Input, OnInit } from '@angular/core';
 export class RefUnitComponent implements OnInit {
   @Input() ref: Refrigerator;
 
-  photoCtrl: AbstractControl;
   photo: string;
 
+  @ViewChild('photoInput')
+  private photoInputRef: ElementRef;
+
+  constructor(
+    private $refService: RefrigeratorService
+  ) {}
+
   ngOnInit() {
-    this.photoCtrl = new FormControl();
-    this.photoCtrl.valueChanges.subscribe(console.log);
   }
 
+  triggerPhotoInput() {
+    this.photoInputRef.nativeElement.click();
+  }
+  /**
+   * Photo file changed
+   * @param event event
+   */
   photoFileChanged(event) {
     const reader = new FileReader();
     reader.onload = (file) => {
+      const photo = file.target['result'];
       console.log(file);
-      this.photo = file.target['result'];
+      this.$refService.updateRef(
+          {
+            key: this.ref.key,
+            name: this.ref.name,
+            products: this.ref.products,
+            archivedProducts: this.ref.archivedProducts,
+            iconAssetUrl: this.ref.iconAssetUrl,
+            photo
+          }
+      );
     };
     reader.readAsDataURL(event.target.files[0]);
   }

@@ -1,3 +1,4 @@
+import { MyMaterialModule } from './../my-material.module';
 import { RefUnitComponent } from './unit/unit.component';
 import { NgModule } from '@angular/core';
 import { RefrigeratorsComponent } from './refrigerators.component';
@@ -21,7 +22,8 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
         FormsModule,
         ReactiveFormsModule,
         CommonModule,
-        RouterModule
+        RouterModule,
+        MyMaterialModule
     ],
     exports: [
         RefrigeratorsComponent

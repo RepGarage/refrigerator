@@ -11,10 +11,13 @@ import (
 // ProductsAPI type
 type ProductsAPI struct{}
 
-var apiInterface ApiInterface
-
 // GetProductsHandler func
-func (p *ProductsAPI) GetProductsHandler(w http.ResponseWriter, r *http.Request) {
+func (p *ProductsAPI) GetProductsHandler(
+	apiInterface APIInterface,
+	dbi DatabaseInterface,
+	w http.ResponseWriter,
+	r *http.Request) {
+
 	w.Header().Add("Access-Control-Allow-Origin", "http://localhost:4200")
 	w.Header().Add("Content-Type", "application/json")
 	name := r.URL.Query().Get("name")
@@ -37,12 +40,17 @@ func (p *ProductsAPI) GetProductsHandler(w http.ResponseWriter, r *http.Request)
 
 	// Concurrent add products to database
 	for _, v := range products {
-		go DatabaseInterfaceInstance.InsertProductToDB(v)
+		go dbi.InsertProductToDB(v)
 	}
 }
 
 // GetProductImageHandler func
-func (p *ProductsAPI) GetProductImageHandler(w http.ResponseWriter, r *http.Request) {
+func (p *ProductsAPI) GetProductImageHandler(
+	apiInterface APIInterface,
+	dbi DatabaseInterface,
+	w http.ResponseWriter,
+	r *http.Request) {
+
 	w.Header().Add("Access-Control-Allow-Origin", "http://localhost:4200")
 	w.Header().Add("Content-Type", "application/json")
 	productID := r.URL.Query().Get("product_id")
@@ -57,7 +65,7 @@ func (p *ProductsAPI) GetProductImageHandler(w http.ResponseWriter, r *http.Requ
 	}
 
 	// Fetch from database
-	image, err := DatabaseInterfaceInstance.FetchPhotoFromDBByProductID(productID, side)
+	image, err := dbi.FetchPhotoFromDBByProductID(productID, side)
 	if len(image.Data) < 10 || err != nil {
 		image, err := apiInterface.GetProductImageFromAPI(&http.Client{}, side, productID)
 		if err != nil {
@@ -79,7 +87,7 @@ func (p *ProductsAPI) GetProductImageHandler(w http.ResponseWriter, r *http.Requ
 			numSide, e := strconv.Atoi(side)
 			if e == nil {
 				// Concurrent add photo to db
-				go DatabaseInterfaceInstance.InsertPhotoToDB(db.Photo{
+				go dbi.InsertPhotoToDB(db.Photo{
 					ProductID: numProductID,
 					Side:      numSide,
 					Data:      image,
