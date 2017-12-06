@@ -17,8 +17,14 @@ var (
 	partnerID           = os.Getenv("PARTNER_ID")
 )
 
-// ApiInterface api calls
-type ApiInterface struct{}
+// APIInterface api calls
+type APIInterface interface {
+	GetProducts(httpClient HTTPClient, name string) ([]db.Product, error)
+	GetProductImageFromAPI(httpClient HTTPClient, side interface{}, productID interface{}) (string, error)
+}
+
+// API ApiInterface implementation
+type API struct{}
 
 // ProductsResponse type response
 type ProductsResponse struct {
@@ -33,12 +39,13 @@ type ResponseProduct struct {
 	ProductID int    `json:"product_id,omitempty"`
 }
 
-type httpClient interface {
+// HTTPClient interface
+type HTTPClient interface {
 	Get(string) (*http.Response, error)
 }
 
 // GetProducts return products object
-func (p ApiInterface) GetProducts(httpClient httpClient, name string) ([]db.Product, error) {
+func (p API) GetProducts(httpClient HTTPClient, name string) ([]db.Product, error) {
 	r, err := httpClient.Get(productsBaseURL + "prompt?text=" + name)
 	if err != nil {
 		return []db.Product{}, err
@@ -77,7 +84,7 @@ func convertProductsResponseToProducts(r ProductsResponse) []db.Product {
 }
 
 // GetProductImageFromAPI returns image of product
-func (p ApiInterface) GetProductImageFromAPI(httpClient httpClient, side interface{}, productID interface{}) (string, error) {
+func (p API) GetProductImageFromAPI(httpClient HTTPClient, side interface{}, productID interface{}) (string, error) {
 	var id string
 	var sSide string
 	// Converting

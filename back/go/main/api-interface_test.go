@@ -1,14 +1,23 @@
-package main
+package main_test
 
 import (
 	"bytes"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"testing"
 
+	main "github.com/RepGarage/refrigerator/back/go/main"
 	"github.com/stretchr/testify/assert"
 
 	"gopkg.in/h2non/gock.v1"
+)
+
+var (
+	productsBaseURL     = os.Getenv("PRODUCTS_BASE_URL")
+	productImageBaseURL = os.Getenv("PRODUCT_IMAGE_BASE_URL")
+	partnerID           = os.Getenv("PARTNER_ID")
+	api                 main.API
 )
 
 func TestGetProducts(t *testing.T) {
@@ -17,9 +26,9 @@ func TestGetProducts(t *testing.T) {
 	gock.New(productsBaseURL).
 		Get("prompt").
 		Reply(200).
-		JSON(ProductsResponse{
+		JSON(main.ProductsResponse{
 			Text: "Test",
-			Results: []ResponseProduct{
+			Results: []main.ResponseProduct{
 				{
 					Entity:    "product",
 					Text:      requestProductName,
@@ -28,7 +37,7 @@ func TestGetProducts(t *testing.T) {
 			},
 		})
 
-	result, err := apiInterface.GetProducts(&http.Client{}, requestProductName)
+	result, err := api.GetProducts(&http.Client{}, requestProductName)
 
 	assert.Equal(t, nil, err, "error should be nil")
 
@@ -56,14 +65,14 @@ func TestGerProductImageFromAPI(t *testing.T) {
 		BodyString("test")
 
 	// Side and ProductID string
-	resultString, err := apiInterface.GetProductImageFromAPI(&mockHTTP, testProductSide, testProductID)
+	resultString, err := api.GetProductImageFromAPI(&mockHTTP, testProductSide, testProductID)
 	if err != nil {
 		t.Error(err)
 	}
 	assert.Equal(t, true, len(resultString) > 0, "result length should be more than 0")
 
 	// Side and ProductID int
-	resultInt, err := apiInterface.GetProductImageFromAPI(&http.Client{}, 100, 1)
+	resultInt, err := api.GetProductImageFromAPI(&http.Client{}, 100, 1)
 	if err != nil {
 		t.Error(err)
 	}
