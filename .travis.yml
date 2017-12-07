@@ -1,21 +1,38 @@
-branches:
-  only:
-  - back/go/main
-
 matrix:
   include:
-    - language: go
+    - if: branch =~ /master|back\/go\/main/
+    
+      language: go
 
       go:
         - 1.9.2
+      services:
+        - mongodb
 
       install: 
         - mkdir -p $GOPATH/src/github.com/RepGarage
         - ln -s $GOPATH/src/github.com/RepGarage/go
         - cd back/go/main && ./install-deps.sh
-      services:
-        - mongodb
 
       script: go test ./... -cover
 
       after_success: ./deploy-docker.sh
+
+    - if: branch =~ /master|front\/ts\/main/
+    
+      language: javascript
+
+      script: front/ts/main/deploy-docker.sh
+
+    - if: branch =~ /master|back\/cs\/main/
+    
+      language: csharp
+
+      services:
+        - mongodb
+      mono: none
+      dotnet: 2.0.0
+      script:
+        - dotnet restore ./back/cs/RefregeratorApp/
+        - dotnet build  ./back/cs/RefregeratorApp/Main.sln
+        - dotnet test ./back/cs/RefregeratorApp/Main.Tests
