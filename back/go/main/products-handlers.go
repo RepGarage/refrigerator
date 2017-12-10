@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/RepGarage/refrigerator/back/go/main/db"
+	"github.com/centrypoint/refrigerator/back/go/main/db"
 )
 
 // ProductsAPI type

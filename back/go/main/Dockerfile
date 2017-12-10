@@ -1,8 +1,8 @@
 FROM golang:1.9.2-alpine3.6
 
-WORKDIR /go/src/github.com/RepGarage/refrigerator/back/go/main
+WORKDIR /go/src/github.com/centrypoint/refrigerator/back/go/main
 
-ADD . /go/src/github.com/RepGarage/refrigerator/back/go/main
+ADD . /go/src/github.com/centrypoint/refrigerator/back/go/main
 
 RUN apk add --no-cache git
 

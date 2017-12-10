@@ -8,7 +8,7 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/RepGarage/refrigerator/back/go/main/db"
+	"github.com/centrypoint/refrigerator/back/go/main/db"
 )
 
 var (

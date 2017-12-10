@@ -5,7 +5,7 @@ import (
 
 	"gopkg.in/mgo.v2"
 
-	"github.com/RepGarage/refrigerator/back/go/main/db"
+	"github.com/centrypoint/refrigerator/back/go/main/db"
 )
 
 var mongoURL = os.Getenv("MONGO_URL")
