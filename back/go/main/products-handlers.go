@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/RepGarage/refrigerator/back/go/main/db"
+	"github.com/centrypoint/refrigerator/back/go/main/db"
 )
 
 // ProductsAPI type
@@ -17,7 +17,6 @@ func (p *ProductsAPI) GetProductsHandler(
 	dbi DatabaseInterface,
 	w http.ResponseWriter,
 	r *http.Request) {
-
 	w.Header().Add("Access-Control-Allow-Origin", "http://localhost:4200")
 	w.Header().Add("Content-Type", "application/json")
 	name := r.URL.Query().Get("name")

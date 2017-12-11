@@ -3,9 +3,9 @@ package main
 import (
 	"log"
 	"net/http"
-)
 
-var productsAPI ProductsAPI
+	"github.com/goncharovnikita/gosplitter"
+)
 
 // Server provides serving functions fy given port
 type Server struct {
@@ -15,20 +15,19 @@ type Server struct {
 }
 
 // Serve serve http server
-func (s *Server) Serve(apiInterface APIInterface, dbi DatabaseInterface) {
+func (s *Server) Serve(apiInterface APIInterface) {
 	log.Printf("Starting HTTP server on :%v", s.port)
 	s.mux = http.NewServeMux()
+	var apiHandler = APIHandler{
+		apiInterface: apiInterface,
+		mux:          s.mux,
+		dbi:          s.db,
+	}
 	s.mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		log.Printf("%v %v", r.Method, r.URL.Path)
 		w.Write([]byte("Hello!"))
 	})
-	s.mux.HandleFunc("/api/get/products", func(w http.ResponseWriter, r *http.Request) {
-		log.Printf("%v %v", r.Method, r.URL.Path)
-		productsAPI.GetProductsHandler(apiInterface, dbi, w, r)
-	})
-	s.mux.HandleFunc("/api/get/product/image", func(w http.ResponseWriter, r *http.Request) {
-		log.Printf("%v %v", r.Method, r.URL.Path)
-		productsAPI.GetProductImageHandler(apiInterface, dbi, w, r)
-	})
+	gosplitter.Match("/api", s.mux, apiHandler)
+	apiHandler.Start()
 	log.Fatal(http.ListenAndServe(s.port, s.mux))
 }
