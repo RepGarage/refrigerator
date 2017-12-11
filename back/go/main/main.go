@@ -22,7 +22,7 @@ func main() {
 		panic(e)
 	}
 	server := Server{port: serverPort, db: &database}
-	server.Serve(api, &databaseInstance)
+	server.Serve(api)
 }
 
 // SetupLogger set logger prefix

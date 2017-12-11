@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"os"
 
 	"gopkg.in/mgo.v2"
@@ -53,10 +54,12 @@ func (d *Database) FetchPhotoFromDBByProductID(productID interface{}, side inter
 
 // InsertProductToDB func
 func (d *Database) InsertProductToDB(prod db.Product) error {
+	log.Printf("Inserting product %+v to db\n", prod)
 	return db.Insert(prod, d.Session, d.Database.Name)
 }
 
 // InsertPhotoToDB func
 func (d *Database) InsertPhotoToDB(photo db.Photo) error {
+	log.Printf("Inserting photo %+v to db\n", photo)
 	return db.Insert(photo, d.Session, d.Database.Name)
 }
