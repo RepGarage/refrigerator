@@ -7,6 +7,13 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
+// Prepare ensure indexes
+// func Prepare(sess *mgo.Session, dbName) error {
+// 	clone := sess.Clone()
+// 	defer clone.Close()
+// 	clone.DB(dbName).C("products").EnsureIndexKey("_id")
+// }
+
 // Insert generic function
 func Insert(model interface{}, sess *mgo.Session, dbName string) error {
 	cloneSess := sess.Clone()
