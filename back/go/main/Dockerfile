@@ -8,9 +8,9 @@ RUN apk add --no-cache git
 
 RUN ./install-deps.sh && go build
 
-RUN find . -type f ! -name 'main' -delete
-
-RUN apk del git
+RUN find . -type f ! -name 'main' -delete \
+    rm -rf db \
+    apk del git 
 
 RUN ls
 
