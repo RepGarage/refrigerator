@@ -3,8 +3,8 @@ package main_test
 import (
 	"testing"
 
-	main "github.com/RepGarage/refrigerator/back/go/main"
-	"github.com/RepGarage/refrigerator/back/go/main/db"
+	main "github.com/centrypoint/refrigerator/back/go/main"
+	"github.com/centrypoint/refrigerator/back/go/main/db"
 	"github.com/stretchr/testify/assert"
 )
 

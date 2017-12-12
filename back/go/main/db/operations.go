@@ -7,6 +7,13 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
+// Prepare ensure indexes
+// func Prepare(sess *mgo.Session, dbName) error {
+// 	clone := sess.Clone()
+// 	defer clone.Close()
+// 	clone.DB(dbName).C("products").EnsureIndexKey("_id")
+// }
+
 // Insert generic function
 func Insert(model interface{}, sess *mgo.Session, dbName string) error {
 	cloneSess := sess.Clone()
@@ -50,7 +57,7 @@ func FindPhotoByProductID(id interface{}, side interface{}, sess *mgo.Session, d
 		break
 	}
 
-	e := cloneSess.DB(dbName).C("photos").Find(bson.M{"product_id": iID, "side": iSide}).One(&result)
+	e := cloneSess.DB(dbName).C("photos").Find(bson.M{"_id": iID, "side": iSide}).One(&result)
 	return result, e
 }
 
@@ -69,6 +76,6 @@ func FindProductByID(id interface{}, sess *mgo.Session, dbName string) (Product,
 		iID = v
 		break
 	}
-	e := cloneSess.DB(dbName).C("products").Find(bson.M{"product_id": iID}).One(&result)
+	e := cloneSess.DB(dbName).C("products").Find(bson.M{"_id": iID}).One(&result)
 	return result, e
 }
