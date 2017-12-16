@@ -1,4 +1,4 @@
-package main_test
+package server_test
 
 import (
 	"bytes"
@@ -7,7 +7,8 @@ import (
 	"os"
 	"testing"
 
-	main "github.com/centrypoint/refrigerator/back/go/main"
+	server "github.com/centrypoint/refrigerator/back/go/main/server"
+
 	"github.com/stretchr/testify/assert"
 
 	"gopkg.in/h2non/gock.v1"
@@ -17,7 +18,7 @@ var (
 	productsBaseURL     = os.Getenv("PRODUCTS_BASE_URL")
 	productImageBaseURL = os.Getenv("PRODUCT_IMAGE_BASE_URL")
 	partnerID           = os.Getenv("PARTNER_ID")
-	api                 main.API
+	api                 server.API
 )
 
 func TestGetProducts(t *testing.T) {
@@ -26,9 +27,9 @@ func TestGetProducts(t *testing.T) {
 	gock.New(productsBaseURL).
 		Get("prompt").
 		Reply(200).
-		JSON(main.ProductsResponse{
+		JSON(server.ProductsResponse{
 			Text: "Test",
-			Results: []main.ResponseProduct{
+			Results: []server.ResponseProduct{
 				{
 					Entity:    "product",
 					Text:      requestProductName,
@@ -79,3 +80,9 @@ func TestGerProductImageFromAPI(t *testing.T) {
 	assert.Equal(t, true, len(resultInt) > 0, "result length should be more than 0")
 	gock.Off()
 }
+
+// func TestGetShelfLife(t *testing.T) {
+// 	var cases = map[string]string {
+// 		"сыр"
+// 	}
+// }

@@ -1,4 +1,4 @@
-package main
+package server
 
 import (
 	b64 "encoding/base64"
@@ -115,4 +115,12 @@ func (p API) GetProductImageFromAPI(httpClient HTTPClient, side interface{}, pro
 	}
 	resultImageFormat := "data:image/jpeg;base64, " + b64.StdEncoding.EncodeToString(response)
 	return resultImageFormat, nil
+}
+
+// GetShelfLife return product shelf life
+func (p API) GetShelfLife(productID interface{}) (int, error) {
+	var err error
+	var res int
+
+	return res, err
 }
