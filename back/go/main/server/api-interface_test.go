@@ -81,8 +81,31 @@ func TestGerProductImageFromAPI(t *testing.T) {
 	gock.Off()
 }
 
-// func TestGetShelfLife(t *testing.T) {
-// 	var cases = map[string]string {
-// 		"сыр"
-// 	}
-// }
+
+type shelfLifeHTTPClient struct {}
+func (s shelfLifeHTTPClient) Get(url string) (*http.Response, error) {
+	switch url {
+	case "/moloko-syr-yaytsa/syry/hochl-syr-pl-tost-s-vet-lomt-45150g--305146?searchPhrase=ветчина":
+		return http.Response{
+			Body: 
+		}
+	}
+}
+func TestGetProductShelfLife(t *testing.T) {
+	var err error
+	var result string
+	var api server.API
+	var cases = map[string]string{
+		"/moloko-syr-yaytsa/syry/hochl-syr-pl-tost-s-vet-lomt-45150g--305146?searchPhrase=ветчина":                   "180 дней",
+		"/moloko-syr-yaytsa/syry/hochl-syr-55-s-vetch-vann-plavl-400g--308011?searchPhrase=ветчина":                  "180 дней",
+		"/konservy-orehi-sousy/myasnye-konservy/elinskiy-vetchina-sterilizov-gost-325g--313010?searchPhrase=ветчина": "365 дней",
+		"/catalog/moloko-syr-yaytsa/moloko/prav-mol-moloko-past-3-2-4-pet-2l--310201":                                "25 дней",
+	}
+
+	for k, v := range cases {
+		if result, err = api.GetProductShelfLife(http.Client{}, k); err != nil {
+			t.Fatal(err)
+		}
+		assert.Equal(t, v, result)
+	}
+}
