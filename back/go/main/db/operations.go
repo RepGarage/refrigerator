@@ -7,6 +7,13 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
+// Prepare ensure indexes
+// func Prepare(sess *mgo.Session, dbName) error {
+// 	clone := sess.Clone()
+// 	defer clone.Close()
+// 	clone.DB(dbName).C("products").EnsureIndexKey("_id")
+// }
+
 // Insert generic function
 func Insert(model interface{}, sess *mgo.Session, dbName string) error {
 	cloneSess := sess.Clone()
@@ -17,6 +24,9 @@ func Insert(model interface{}, sess *mgo.Session, dbName string) error {
 		return e
 	case Photo:
 		e := cloneSess.DB(dbName).C("photos").Insert(model)
+		return e
+	case Shelflife:
+		e := cloneSess.DB(dbName).C("shelflife").Insert(model)
 		return e
 	default:
 		return UnknownModelError{}
@@ -50,7 +60,7 @@ func FindPhotoByProductID(id interface{}, side interface{}, sess *mgo.Session, d
 		break
 	}
 
-	e := cloneSess.DB(dbName).C("photos").Find(bson.M{"product_id": iID, "side": iSide}).One(&result)
+	e := cloneSess.DB(dbName).C("photos").Find(bson.M{"_id": iID, "side": iSide}).One(&result)
 	return result, e
 }
 
@@ -69,6 +79,25 @@ func FindProductByID(id interface{}, sess *mgo.Session, dbName string) (Product,
 		iID = v
 		break
 	}
-	e := cloneSess.DB(dbName).C("products").Find(bson.M{"product_id": iID}).One(&result)
+	e := cloneSess.DB(dbName).C("products").Find(bson.M{"_id": iID}).One(&result)
+	return result, e
+}
+
+// FindShelflifeByProductID func
+func FindShelflifeByProductID(id interface{}, sess *mgo.Session, dbName string) (Shelflife, error) {
+	cloneSess := sess.Clone()
+	defer cloneSess.Close()
+	var result Shelflife
+	var iID int
+	// Converts
+	switch v := id.(type) {
+	case string:
+		iID, _ = strconv.Atoi(v)
+		break
+	case int:
+		iID = v
+		break
+	}
+	e := cloneSess.DB(dbName).C("shelflife").Find(bson.M{"_id": iID}).One(&result)
 	return result, e
 }

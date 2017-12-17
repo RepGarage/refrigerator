@@ -1,3 +1,3 @@
 #!/bin/bash
 
-curl -H "Content-Type: application/json" --data '{"docker_tag": "back-go-main"}' -X POST https://registry.hub.docker.com/u/centrypoint/refrigerator/trigger/2064e54f-14c5-4541-a66d-fc3cd0540cfe/
+curl -H "Content-Type: application/json" --data '{"docker_tag": "back-go"}' -X POST https://registry.hub.docker.com/u/centrypoint/refrigerator/trigger/22d7b61f-d94d-4bfc-97fe-c9ba7035e8e4/

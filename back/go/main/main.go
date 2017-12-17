@@ -3,13 +3,15 @@ package main
 import (
 	"log"
 	"os"
+
+	"github.com/centrypoint/refrigerator/back/go/main/server"
 )
 
 var (
 	// Info logger
 	Info             *log.Logger
-	api              API
-	databaseInstance Database
+	api              server.API
+	databaseInstance server.Database
 	dbName           = os.Getenv("DATABASE_NAME")
 	serverPort       = os.Getenv("SERVER_PORT")
 )
@@ -21,8 +23,8 @@ func main() {
 	if e != nil {
 		panic(e)
 	}
-	server := Server{port: serverPort, db: &database}
-	server.Serve(api, &databaseInstance)
+	server := server.Server{Port: serverPort, DB: &database}
+	server.Serve(api)
 }
 
 // SetupLogger set logger prefix

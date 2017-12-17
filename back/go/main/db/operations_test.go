@@ -1,9 +1,10 @@
-package db
+package db_test
 
 import (
 	"os"
 	"testing"
 
+	"github.com/centrypoint/refrigerator/back/go/main/db"
 	"github.com/stretchr/testify/assert"
 
 	"gopkg.in/mgo.v2"
@@ -18,23 +19,45 @@ func TestInsertProduct(t *testing.T) {
 	if e != nil {
 		t.Error(e)
 	}
-	var testProduct = Product{
+	var testProduct = db.Product{
 		Name:      "Product",
 		ProductID: 1,
 	}
-	err := Insert(testProduct, sess, dbName)
+	err := db.Insert(testProduct, sess, dbName)
 	if err != nil {
+		sess.DB(dbName).C("products").DropCollection()
 		t.Error(err)
 	}
 	c, e := sess.DB(dbName).C("products").Count()
 	if e != nil {
+		sess.DB(dbName).C("products").DropCollection()
 		t.Error(e)
 	}
 	assert.Equal(t, 1, c, "products collection size should be 1")
-	_err := sess.DB(dbName).C("products").DropCollection()
-	if err != nil {
-		t.Error(_err)
+	sess.DB(dbName).C("products").DropCollection()
+}
+
+func TestInsertShelflife(t *testing.T) {
+	sess, e := mgo.Dial(mongoURL)
+	if e != nil {
+		t.Error(e)
 	}
+	var testShelflife = db.Shelflife{
+		ProductID: 1,
+		Data:      "180 дней",
+	}
+	err := db.Insert(testShelflife, sess, dbName)
+	if err != nil {
+		sess.DB(dbName).C("shelflife").DropCollection()
+		t.Error(err)
+	}
+	c, e := sess.DB(dbName).C("shelflife").Count()
+	if e != nil {
+		sess.DB(dbName).C("shelflife").DropCollection()
+		t.Error(e)
+	}
+	assert.Equal(t, 1, c, "shelflife collection size should be 1")
+	sess.DB(dbName).C("shelflife").DropCollection()
 }
 
 func TestInsertPhoto(t *testing.T) {
@@ -42,24 +65,23 @@ func TestInsertPhoto(t *testing.T) {
 	if e != nil {
 		t.Error(e)
 	}
-	var testPhoto = Photo{
+	var testPhoto = db.Photo{
 		Data:      "testphoto",
 		ProductID: 1,
 		Side:      100,
 	}
-	err := Insert(testPhoto, sess, dbName)
+	err := db.Insert(testPhoto, sess, dbName)
 	if err != nil {
+		sess.DB(dbName).C("photos").DropCollection()
 		t.Error(err)
 	}
 	c, e := sess.DB(dbName).C("photos").Count()
 	if e != nil {
+		sess.DB(dbName).C("photos").DropCollection()
 		t.Error(e)
 	}
 	assert.Equal(t, 1, c, "collection size should be 1")
-	_err := sess.DB(dbName).C("photos").DropCollection()
-	if err != nil {
-		t.Error(_err)
-	}
+	sess.DB(dbName).C("photos").DropCollection()
 }
 
 func TestInsertUnknown(t *testing.T) {
@@ -70,8 +92,8 @@ func TestInsertUnknown(t *testing.T) {
 	type testUnknown struct {
 		Name string
 	}
-	err := Insert(testUnknown{Name: "unknown"}, sess, dbName)
-	assert.Equal(t, UnknownModelError{}, err, "should be returned UnknownModelError")
+	err := db.Insert(testUnknown{Name: "unknown"}, sess, dbName)
+	assert.Equal(t, db.UnknownModelError{}, err, "should be returned UnknownModelError")
 }
 
 func TestFindProductByID(t *testing.T) {
@@ -79,34 +101,67 @@ func TestFindProductByID(t *testing.T) {
 	if e != nil {
 		t.Error(e)
 	}
-	var testProduct = Product{
+	var testProduct = db.Product{
 		Name:      "Product",
 		ProductID: 1,
 	}
-	err := Insert(testProduct, sess, dbName)
+	err := db.Insert(testProduct, sess, dbName)
 	if err != nil {
+		sess.DB(dbName).C("products").DropCollection()
 		t.Error(err)
 	}
-	pInt, err := FindProductByID(testProduct.ProductID, sess, dbName)
+	pInt, err := db.FindProductByID(testProduct.ProductID, sess, dbName)
 	if err != nil {
+		sess.DB(dbName).C("products").DropCollection()
 		t.Error(err)
 	}
 
 	assert.Equal(t, "Product", pInt.Name, "name should be Product")
 	assert.Equal(t, 1, pInt.ProductID, "productID should be 1")
 
-	pString, err := FindProductByID("1", sess, dbName)
+	pString, err := db.FindProductByID("1", sess, dbName)
 	if err != nil {
+		sess.DB(dbName).C("products").DropCollection()
 		t.Error(err)
 	}
 
 	assert.Equal(t, "Product", pString.Name, "name should be Product")
 	assert.Equal(t, 1, pString.ProductID, "productID should be 1")
 
-	_err := sess.DB(dbName).C("products").DropCollection()
-	if err != nil {
-		t.Error(_err)
+	sess.DB(dbName).C("products").DropCollection()
+}
+
+func TestFindShelflifeByProductID(t *testing.T) {
+	var session *mgo.Session
+	var err error
+	var shelf db.Shelflife
+	if session, err = mgo.Dial(mongoURL); err != nil {
+		t.Fatal(err)
 	}
+	var testShelflife = db.Shelflife{
+		ProductID: 1,
+		Data:      "180 дней",
+	}
+	if err = db.Insert(testShelflife, session, dbName); err != nil {
+		t.Fatal(err)
+	}
+	if shelf, err = db.FindShelflifeByProductID(testShelflife.ProductID, session, dbName); err != nil {
+		session.DB(dbName).C("shelflife").DropCollection()
+		t.Fatal(err)
+	}
+
+	assert.Equal(t, "180 дней", shelf.Data)
+	assert.Equal(t, 1, shelf.ProductID, "productID should be 1")
+
+	if shelf, err = db.FindShelflifeByProductID("1", session, dbName); err != nil {
+		session.DB(dbName).C("shelflife").DropCollection()
+		t.Fatal(err)
+	}
+
+	assert.Equal(t, "180 дней", shelf.Data)
+	assert.Equal(t, 1, shelf.ProductID, "productID should be 1")
+
+	session.DB(dbName).C("shelflife").DropCollection()
 }
 
 func TestFindPhotoByProductIDAndSide(t *testing.T) {
@@ -114,19 +169,21 @@ func TestFindPhotoByProductIDAndSide(t *testing.T) {
 	if e != nil {
 		t.Error(e)
 	}
-	var testPhoto = Photo{
+	var testPhoto = db.Photo{
 		Data:      "testphoto",
 		ProductID: 1,
 		Side:      100,
 	}
 	err := sess.DB(dbName).C("photos").Insert(testPhoto)
 	if err != nil {
+		sess.DB(dbName).C("photos").DropCollection()
 		t.Error(err)
 	}
 
 	// ProductID and Side int
-	p, err := FindPhotoByProductID(testPhoto.ProductID, testPhoto.Side, sess, dbName)
+	p, err := db.FindPhotoByProductID(testPhoto.ProductID, testPhoto.Side, sess, dbName)
 	if err != nil {
+		sess.DB(dbName).C("photos").DropCollection()
 		t.Error(err)
 	}
 
@@ -135,8 +192,9 @@ func TestFindPhotoByProductIDAndSide(t *testing.T) {
 	assert.Equal(t, 100, p.Side, "side should be 100")
 
 	// ProdcutID string, Side int
-	pSI, err := FindPhotoByProductID("1", testPhoto.Side, sess, dbName)
+	pSI, err := db.FindPhotoByProductID("1", testPhoto.Side, sess, dbName)
 	if err != nil {
+		sess.DB(dbName).C("photos").DropCollection()
 		t.Error(err)
 	}
 
@@ -145,8 +203,9 @@ func TestFindPhotoByProductIDAndSide(t *testing.T) {
 	assert.Equal(t, 100, pSI.Side, "side should be 100")
 
 	// ProductID and Side string
-	pSS, err := FindPhotoByProductID("1", "100", sess, dbName)
+	pSS, err := db.FindPhotoByProductID("1", "100", sess, dbName)
 	if err != nil {
+		sess.DB(dbName).C("photos").DropCollection()
 		t.Error(err)
 	}
 
@@ -154,10 +213,7 @@ func TestFindPhotoByProductIDAndSide(t *testing.T) {
 	assert.Equal(t, 1, pSS.ProductID, "products id should be 1")
 	assert.Equal(t, 100, pSS.Side, "side should be 100")
 
-	_err := sess.DB(dbName).C("photos").DropCollection()
-	if err != nil {
-		t.Error(_err)
-	}
+	sess.DB(dbName).C("photos").DropCollection()
 }
 
 func BenchmarkInsert(b *testing.B) {
@@ -166,11 +222,11 @@ func BenchmarkInsert(b *testing.B) {
 		b.Error(e)
 	}
 	for i := 0; i < b.N; i++ {
-		var testProduct = Product{
+		var testProduct = db.Product{
 			Name:      "Product",
 			ProductID: i,
 		}
-		err := Insert(testProduct, sess, dbName)
+		err := db.Insert(testProduct, sess, dbName)
 		if err != nil {
 			b.Error(err)
 		}
