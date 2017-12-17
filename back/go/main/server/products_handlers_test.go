@@ -38,6 +38,10 @@ func (m apiInterfaceMock) GetProducts(c server.HTTPClient, name string) ([]db.Pr
 	}
 }
 
+func (m apiInterfaceMock) GetProductShelfLife(httpClient server.HTTPClient, url string) (string, error) {
+	return "", nil
+}
+
 func (p apiInterfaceMock) GetProductImageFromAPI(httpClient server.HTTPClient, side interface{}, productID interface{}) (string, error) {
 	return "", nil
 }
@@ -65,6 +69,14 @@ func (d DBInterfaceMock) Connect(string) error {
 
 func (d DBInterfaceMock) InsertProductToDB(p db.Product) error {
 	return nil
+}
+
+func (d DBInterfaceMock) InsertShelflifeToDB(shelf db.Shelflife) error {
+	return nil
+}
+
+func (d DBInterfaceMock) FetchShelflifeFromDBByProductID(interface{}) (db.Shelflife, error) {
+	return db.Shelflife{}, nil
 }
 
 func (d DBInterfaceMock) FetchPhotoFromDBByProductID(interface{}, interface{}) (db.Photo, error) {
