@@ -57,7 +57,7 @@ func FindPhotoByProductID(id interface{}, side interface{}, sess *mgo.Session, d
 		break
 	}
 
-	e := cloneSess.DB(dbName).C("photos").Find(bson.M{"product_id": iID, "side": iSide}).One(&result)
+	e := cloneSess.DB(dbName).C("photos").Find(bson.M{"_id": iID, "side": iSide}).One(&result)
 	return result, e
 }
 
@@ -76,6 +76,6 @@ func FindProductByID(id interface{}, sess *mgo.Session, dbName string) (Product,
 		iID = v
 		break
 	}
-	e := cloneSess.DB(dbName).C("products").Find(bson.M{"product_id": iID}).One(&result)
+	e := cloneSess.DB(dbName).C("products").Find(bson.M{"_id": iID}).One(&result)
 	return result, e
 }

@@ -1,16 +1,16 @@
-package main_test
+package server_test
 
 import (
 	"net/http"
 	"net/url"
 	"testing"
 
-	main "github.com/centrypoint/refrigerator/back/go/main"
 	"github.com/centrypoint/refrigerator/back/go/main/db"
+	server "github.com/centrypoint/refrigerator/back/go/main/server"
 )
 
 var (
-	testProductsApi          main.ProductsAPI
+	testProductsApi          server.ProductsAPI
 	apiInterfaceMockInstance apiInterfaceMock
 	mockHTTPWriterInstance   mockHTTPWriter
 	dbInterfaceMockInstance  DBInterfaceMock
@@ -24,7 +24,7 @@ var (
 // Mock api interface
 type apiInterfaceMock struct{}
 
-func (m apiInterfaceMock) GetProducts(c main.HTTPClient, name string) ([]db.Product, error) {
+func (m apiInterfaceMock) GetProducts(c server.HTTPClient, name string) ([]db.Product, error) {
 	switch name {
 	case testName200:
 		return []db.Product{
@@ -38,7 +38,7 @@ func (m apiInterfaceMock) GetProducts(c main.HTTPClient, name string) ([]db.Prod
 	}
 }
 
-func (p apiInterfaceMock) GetProductImageFromAPI(httpClient main.HTTPClient, side interface{}, productID interface{}) (string, error) {
+func (p apiInterfaceMock) GetProductImageFromAPI(httpClient server.HTTPClient, side interface{}, productID interface{}) (string, error) {
 	return "", nil
 }
 

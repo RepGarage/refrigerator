@@ -4,6 +4,7 @@ package db
 type Product struct {
 	ProductID int    `json:"_id" bson:"_id"`
 	Name      string `json:"name" bson:"name"`
+	URL       string `json:"url" bson:"url"`
 }
 
 //Photo model

@@ -1,15 +1,15 @@
-package main_test
+package server_test
 
 import (
 	"testing"
 
-	main "github.com/centrypoint/refrigerator/back/go/main"
 	"github.com/centrypoint/refrigerator/back/go/main/db"
+	server "github.com/centrypoint/refrigerator/back/go/main/server"
 	"github.com/stretchr/testify/assert"
 )
 
 var (
-	dbi    main.Database
+	dbi    server.Database
 	dbName = "ref-go-test"
 )
 

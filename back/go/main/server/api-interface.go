@@ -1,4 +1,4 @@
-package main
+package server
 
 import (
 	b64 "encoding/base64"
@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 
 	"github.com/centrypoint/refrigerator/back/go/main/db"
 )
@@ -37,6 +38,7 @@ type ResponseProduct struct {
 	Entity    string `json:"entity"`
 	Text      string `json:"text"`
 	ProductID int    `json:"product_id,omitempty"`
+	URL       string `json:"url,omitempty"`
 }
 
 // HTTPClient interface
@@ -76,6 +78,7 @@ func convertProductsResponseToProducts(r ProductsResponse) []db.Product {
 				db.Product{
 					Name:      v.Text,
 					ProductID: v.ProductID,
+					URL:       v.URL,
 				},
 			)
 		}
@@ -115,4 +118,38 @@ func (p API) GetProductImageFromAPI(httpClient HTTPClient, side interface{}, pro
 	}
 	resultImageFormat := "data:image/jpeg;base64, " + b64.StdEncoding.EncodeToString(response)
 	return resultImageFormat, nil
+}
+
+// GetProductShelfLife return product shelf life
+func (p API) GetProductShelfLife(httpClient HTTPClient, url string) (string, error) {
+	var err error
+	var res string
+	var response *http.Response
+	var body []byte
+
+	if response, err = httpClient.Get(productsBaseURL + url); err != nil {
+		return "", err
+	}
+
+	defer response.Body.Close()
+	if body, err = ioutil.ReadAll(response.Body); err != nil {
+		return "", err
+	}
+
+	var bodyRows = strings.Split(string(body), "\n")
+
+	for i, v := range bodyRows {
+
+		// fmt.Println(v)
+		if strings.HasPrefix(strings.Trim(v, " "), "<h4") && strings.Contains(v, "Условия хранения") {
+			if strings.HasPrefix(strings.Trim(bodyRows[i+28], " "), "</a") {
+				res = strings.Trim(bodyRows[i+27], " ")
+			} else {
+				res = strings.Trim(bodyRows[i+26], " ")
+			}
+			break
+		}
+	}
+
+	return res, err
 }
