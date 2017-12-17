@@ -20,7 +20,7 @@
     </div>
   </div>
   <div class="card-footer text-center">
-    <a [ngClass]="{'text-primary': !(selected | async), 'text-white': (selected | async)}" [routerLink]="['/r/refrigerators', ref.key]">Выбрать</a>
+    <a [ngClass]="{'text-primary': !(selected | async), 'text-white': (selected | async)}" (click)="selectAndRedirect()">Выбрать</a>
   </div>
 </div>
 <input #photoInput type="file" class="hidden" (change)="photoFileChanged($event)" >

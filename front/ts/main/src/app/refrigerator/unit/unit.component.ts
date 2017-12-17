@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { RefrigeratorService } from './../refrigerator.service';
 import { AbstractControl, FormControl } from '@angular/forms';
@@ -21,7 +22,8 @@ export class RefUnitComponent implements OnInit {
    * CONSTRUCTOR
    */
   constructor(
-    private $rs: RefrigeratorService
+    private $rs: RefrigeratorService,
+    private $router: Router
   ) {}
 
   ngOnInit() {
@@ -49,6 +51,11 @@ export class RefUnitComponent implements OnInit {
 
   select() {
     this.$rs.selectRefrigerator(this.ref);
+  }
+
+  selectAndRedirect() {
+    this.select();
+    this.$router.navigate(['/r/refrigerators', this.ref.key]);
   }
 
   getProductsLength(products: object) {
