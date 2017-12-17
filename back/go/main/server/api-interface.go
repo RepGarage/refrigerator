@@ -22,6 +22,7 @@ var (
 type APIInterface interface {
 	GetProducts(httpClient HTTPClient, name string) ([]db.Product, error)
 	GetProductImageFromAPI(httpClient HTTPClient, side interface{}, productID interface{}) (string, error)
+	GetProductShelfLife(httpClient HTTPClient, url string) (string, error)
 }
 
 // API ApiInterface implementation

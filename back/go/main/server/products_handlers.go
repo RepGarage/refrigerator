@@ -2,6 +2,7 @@ package server
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -104,4 +105,66 @@ func (p *ProductsAPI) GetProductImageHandler(
 		w.Write(response)
 	}
 
+}
+
+// GetProductShelflifeHandler func
+func (p *ProductsAPI) GetProductShelflifeHandler(
+	apiInterface APIInterface,
+	dbi DatabaseInterface,
+	w http.ResponseWriter,
+	r *http.Request) {
+
+	var productID = r.URL.Query().Get("product_id")
+	var productURL = r.URL.Query().Get("product_url")
+	var result string
+	var response []byte
+	var err error
+
+	if len(productID) < 1 && len(productURL) < 1 {
+		w.WriteHeader(400)
+		return
+	}
+
+	if len(productID) > 1 {
+		var product db.Product
+		if product, err = dbi.FetchProductFromDBByID(productID); err != nil {
+			w.WriteHeader(500)
+			log.Fatal(err)
+			return
+		}
+
+		if result, err = apiInterface.GetProductShelfLife(&http.Client{}, product.URL); err != nil {
+			w.WriteHeader(500)
+			log.Fatal(err)
+			return
+		}
+
+		if response, err = json.Marshal(map[string]string{"result": result}); err != nil {
+			w.WriteHeader(500)
+			log.Fatal(err)
+			return
+		}
+
+		if _, err = w.Write(response); err != nil {
+			log.Fatal(err)
+			return
+		}
+	} else {
+		if result, err = apiInterface.GetProductShelfLife(&http.Client{}, productURL); err != nil {
+			w.WriteHeader(500)
+			log.Fatal(err)
+			return
+		}
+
+		if response, err = json.Marshal(map[string]string{"result": result}); err != nil {
+			w.WriteHeader(500)
+			log.Fatal(err)
+			return
+		}
+
+		if _, err = w.Write(response); err != nil {
+			log.Fatal(err)
+			return
+		}
+	}
 }
