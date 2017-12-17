@@ -1,3 +1,4 @@
+import { RefMenuComponent } from './menu/menu.component';
 import { MyMaterialModule } from './../my-material.module';
 import { RefUnitComponent } from './unit/unit.component';
 import { NgModule } from '@angular/core';
@@ -16,7 +17,8 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
         RefrigeratorsComponent,
         AddRefrigeratorComponent,
         RefrigeratorsListComponent,
-        RefUnitComponent
+        RefUnitComponent,
+        RefMenuComponent
     ],
     imports: [
         FormsModule,
@@ -26,7 +28,8 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
         MyMaterialModule
     ],
     exports: [
-        RefrigeratorsComponent
+        RefrigeratorsComponent,
+        RefMenuComponent
     ],
     providers: [
         RefrigeratorService

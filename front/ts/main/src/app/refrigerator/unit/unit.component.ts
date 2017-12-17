@@ -1,3 +1,4 @@
+import { Observable } from 'rxjs/Observable';
 import { RefrigeratorService } from './../refrigerator.service';
 import { AbstractControl, FormControl } from '@angular/forms';
 import { Refrigerator } from './../refrigerator';
@@ -10,19 +11,26 @@ import { Component, Input, OnInit, ViewChild, ElementRef } from '@angular/core';
 })
 export class RefUnitComponent implements OnInit {
   @Input() ref: Refrigerator;
-
   photo: string;
+  selected: Observable<boolean>;
 
   @ViewChild('photoInput')
   private photoInputRef: ElementRef;
 
+  /**
+   * CONSTRUCTOR
+   */
   constructor(
-    private $refService: RefrigeratorService
+    private $rs: RefrigeratorService
   ) {}
 
   ngOnInit() {
+    this.selected = this.$rs.selectedRefrigerator.map(r => r ? r.key === this.ref.key : false);
   }
 
+  /**
+   * FUNCTIONS
+   */
   triggerPhotoInput() {
     this.photoInputRef.nativeElement.click();
   }
@@ -34,8 +42,7 @@ export class RefUnitComponent implements OnInit {
     const reader = new FileReader();
     reader.onload = (file) => {
       const photo = file.target['result'];
-      console.log(file);
-      this.$refService.updateRef(
+      this.$rs.updateRef(
           {
             key: this.ref.key,
             name: this.ref.name,
@@ -47,6 +54,10 @@ export class RefUnitComponent implements OnInit {
       );
     };
     reader.readAsDataURL(event.target.files[0]);
+  }
+
+  select() {
+    this.$rs.selectRefrigerator(this.ref);
   }
 
   getProductsLength(products: object) {

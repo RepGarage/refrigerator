@@ -1,3 +1,4 @@
+import { DomSanitizer } from '@angular/platform-browser';
 import { RefrigeratorService } from './../refrigerator/refrigerator.service';
 import { Refrigerator } from './../refrigerator/refrigerator';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -25,16 +26,23 @@ export class ProductsComponent implements OnInit, OnDestroy {
   products: Observable<Array<Product>>;
   selectedProduct: Observable<Product>;
   addProductActive: Observable<boolean>;
+  selectedRefrigerator: Observable<Refrigerator>;
 
   constructor(
     private $route: ActivatedRoute,
     private $afd: AngularFireDatabase,
+    private $rs: RefrigeratorService,
+    private $dom: DomSanitizer,
     private $productService: ProductService,
     private $refService: RefrigeratorService
   ) {}
 
   ngOnInit() {
-    this.products = this.$productService.fetchProducts();
+    this.selectedRefrigerator = this.$rs.selectedRefrigerator;
+    this.products = this.$productService.fetchProducts()
+      .map(
+        (prods: Array<Product>) => prods.map(
+          p => { p.photoUrl = this.$dom.bypassSecurityTrustUrl(<string>p.photoUrl); return p; }));
     this.selectedProduct = this.$productService.fetchSelectedProduct();
     this.addProductActive = this.$productService.addProductActive;
   }

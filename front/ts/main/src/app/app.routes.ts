@@ -30,14 +30,11 @@ const routes: Routes = [
               user: UserResolver,
               expanded: ExpandedResolver,
               selectedRefrigerator: SelectedRefrigeratorResolver
-            },
-            children: [
-              {
-                path: ':ref_id',
-                component: ProductsComponent,
-                outlet: 'products'
-              }
-            ]
+            }
+          },
+          {
+            path: 'refrigerators/:ref_id',
+            component: ProductsComponent
           }
         ]
       }

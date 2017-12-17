@@ -1,7 +1,7 @@
 import { Subscription } from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
 import { Component, OnInit, ChangeDetectorRef, AfterViewChecked, OnDestroy } from '@angular/core';
-import { IRefrigerator, Refrigerator } from './refrigerator';
+import { Refrigerator } from './refrigerator';
 import { RefrigeratorService } from './refrigerator.service';
 import { Routes, ActivatedRoute, Router } from '@angular/router';
 import { AngularFireObject } from 'angularfire2/database';
@@ -33,6 +33,7 @@ export class RefrigeratorsComponent implements OnInit, AfterViewChecked, OnDestr
     titleState = 'minimized';
     refZoneState = 'invisible';
     addRefrigeratorActive: Observable<boolean>;
+    refrigeratorsCount: Observable<Array<string>>;
 
     /**
      * Getters
@@ -58,13 +59,16 @@ export class RefrigeratorsComponent implements OnInit, AfterViewChecked, OnDestr
     }
 
     ngOnInit() {
+      this.refrigeratorsCount = this.$rs.refrigeratorsCount.map(c => c ? new Array<string>(parseInt(c, 10)) : new Array<string>(0));
       this.selectedRefrigerator = this.$route.snapshot.data['selectedRefrigerator'];
       this.refrigerators = this.$rs.fetchRefrigerators();
       this.expandState = this.$route.snapshot.data['expanded'] ? 'expanded' : 'minimized';
-      this.$rs.selectRefrigerator(this.$route.snapshot.data['selectedRefrigerator']);
       this.$rs.selectedRefrigerator.subscribe((r: Refrigerator) => this.selectedRefrigerator = r);
       this.addRefrigeratorActive = this.$rs.addRefrigeratorActive;
-      this.refrigerators.subscribe(console.log);
+      this.refrigerators.subscribe((r: Array<Refrigerator>) => {
+        console.log(r);
+        this.$rs.setRefrigeratorsCount(r.length);
+      });
     }
 
     /**

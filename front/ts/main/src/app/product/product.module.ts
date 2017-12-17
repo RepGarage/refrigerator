@@ -1,3 +1,4 @@
+import { RouterModule } from '@angular/router';
 import { ListUnitComponent } from './list-unit/list-unit.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -18,7 +19,8 @@ import { MyMaterialModule } from '../my-material.module';
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
-        MyMaterialModule
+        MyMaterialModule,
+        RouterModule
     ],
     declarations: [
         ProductListComponent,

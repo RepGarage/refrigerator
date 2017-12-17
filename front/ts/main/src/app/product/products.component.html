@@ -1,22 +1,19 @@
-<div class="content">
-  <div class="header">
-    <ng-container *ngIf="(products | async)?.length; let count; else noProducts" >
-      <p>Продукты: {{ count }}</p>
-    </ng-container>
-    <ng-template #noProducts>
-      <p>В холодильнике нет продуктов!</p>
-    </ng-template>
-  </div>
+<div class="container">
+  <h3>
+    <span>
+      <mat-icon class="pointer" [routerLink]="['/r/refrigerators']">keyboard_arrow_left</mat-icon>
+    </span> Продукты в холодильнике {{ (selectedRefrigerator | async)?.name}}
+  </h3>
+  <hr>
   <div class="container">
-    <app-product-list
-    (productWasSelected)="selectProduct($event)"
-    [selectedProduct]="selectedProduct"
-    [products]="products" ></app-product-list>
+    <div class="row">
+      <ng-container *ngFor="let p of (products | async)">
+        <div class="col-sm-1 pointer">
+          <div class="card">
+            <img [src]="p.photoUrl" class="card-img-top mr-3">
+          </div>
+        </div>
+      </ng-container>
+    </div>
   </div>
-  <ng-container *ngIf="(addProductActive | async)">
-    <app-add-product></app-add-product>
-  </ng-container>
-  <ng-container *ngIf="(selectedProduct | async); let p">
-    <app-selected-product [product]="p"></app-selected-product>
-  </ng-container>
 </div>

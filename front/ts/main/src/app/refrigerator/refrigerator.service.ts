@@ -2,7 +2,7 @@ import { ActivatedRoute } from '@angular/router';
 import { AuthService } from './../accounting/auth.service';
 import { Observable } from 'rxjs/Observable';
 import { Injectable } from '@angular/core';
-import { IRefrigerator, Refrigerator } from './refrigerator';
+import { Refrigerator } from './refrigerator';
 import {
     AngularFireDatabase,
     AngularFireList,
@@ -17,17 +17,20 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Injectable()
 export class RefrigeratorService {
-    private refrigeratorsRef: AngularFireList<IRefrigerator>;
+    readonly SELECTED_REFRIGERATOR = 'selected_refrigerator';
+    private refrigeratorsRef: AngularFireList<Refrigerator>;
     private _refrigeratorsObservable: Observable<Array<Refrigerator>>;
     private _refrigeratorsIds: Object;
     private user: User;
-    selectedRefrigerator: BehaviorSubject<Refrigerator> = new BehaviorSubject(null);
+    selectedRefrigerator: BehaviorSubject<Refrigerator> = new BehaviorSubject(JSON.parse(localStorage.getItem(this.SELECTED_REFRIGERATOR)));
     subscriptions: Array<Subscription> = new Array();
     addRefrigeratorActive: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
     get refrigeratorsIds() {
         return this._refrigeratorsIds;
     }
+
+    refrigeratorsCount = new BehaviorSubject(localStorage.getItem('refrigerators_count'));
 
     constructor(
         private $afd: AngularFireDatabase,
@@ -45,7 +48,9 @@ export class RefrigeratorService {
     }
 
     selectRefrigerator(ref: Refrigerator) {
+      console.log('Select refrigerator');
       this.selectedRefrigerator.next(ref);
+      localStorage.setItem(this.SELECTED_REFRIGERATOR, JSON.stringify(ref));
     }
 
     /**
@@ -74,6 +79,11 @@ export class RefrigeratorService {
       } else {
         return Observable.of([<Refrigerator>{}]);
       }
+    }
+
+    setRefrigeratorsCount(c: number) {
+      localStorage.setItem('refrigerators_count', c.toString());
+      this.refrigeratorsCount.next(c.toString());
     }
 
     private getRefrigerator(uid: string, ref_id: string): Observable<Refrigerator> {
@@ -126,6 +136,15 @@ export class RefrigeratorService {
           if (user) {
             this.$afd.object(`/refrigerators/${user.uid}/${ref.key}`)
               .update(ref);
+          }
+        });
+    }
+
+    updateRefName(name: string, key: string) {
+      this.$auth.fetchSession()
+        .subscribe((user: User) => {
+          if (user) {
+            this.$afd.object(`/refrigerators/${user.uid}/${key}/name`).set(name);
           }
         });
     }
