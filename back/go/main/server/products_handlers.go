@@ -115,55 +115,57 @@ func (p *ProductsAPI) GetProductShelflifeHandler(
 	r *http.Request) {
 
 	var productID = r.URL.Query().Get("product_id")
-	var productURL = r.URL.Query().Get("product_url")
 	var result string
 	var response []byte
 	var err error
+	var shelf db.Shelflife
 
-	if len(productID) < 1 && len(productURL) < 1 {
+	if len(productID) < 1 {
 		w.WriteHeader(400)
 		return
 	}
 
-	if len(productID) > 1 {
+	if shelf, err = dbi.FetchShelflifeFromDBByProductID(productID); err != nil {
 		var product db.Product
+		err = nil
 		if product, err = dbi.FetchProductFromDBByID(productID); err != nil {
 			w.WriteHeader(500)
-			log.Fatal(err)
+			log.Println(err)
 			return
 		}
 
 		if result, err = apiInterface.GetProductShelfLife(&http.Client{}, product.URL); err != nil {
 			w.WriteHeader(500)
-			log.Fatal(err)
+			log.Println(err)
 			return
 		}
 
+		log.Println(result)
+
 		if response, err = json.Marshal(map[string]string{"result": result}); err != nil {
 			w.WriteHeader(500)
-			log.Fatal(err)
+			log.Println(err)
 			return
 		}
 
 		if _, err = w.Write(response); err != nil {
-			log.Fatal(err)
+			log.Println(err)
 			return
 		}
+
+		go dbi.InsertShelflifeToDB(db.Shelflife{
+			ProductID: product.ProductID,
+			Data:      result,
+		})
 	} else {
-		if result, err = apiInterface.GetProductShelfLife(&http.Client{}, productURL); err != nil {
+		if response, err = json.Marshal(map[string]string{"result": shelf.Data}); err != nil {
 			w.WriteHeader(500)
-			log.Fatal(err)
-			return
-		}
-
-		if response, err = json.Marshal(map[string]string{"result": result}); err != nil {
-			w.WriteHeader(500)
-			log.Fatal(err)
+			log.Println(err)
 			return
 		}
 
 		if _, err = w.Write(response); err != nil {
-			log.Fatal(err)
+			log.Println(err)
 			return
 		}
 	}

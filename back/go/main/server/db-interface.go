@@ -15,9 +15,11 @@ var mongoURL = os.Getenv("MONGO_URL")
 type DatabaseInterface interface {
 	Connect(string) error
 	FetchProductFromDBByID(interface{}) (db.Product, error)
+	FetchShelflifeFromDBByProductID(interface{}) (db.Shelflife, error)
 	FetchPhotoFromDBByProductID(productID interface{}, side interface{}) (db.Photo, error)
 	InsertProductToDB(prod db.Product) error
 	InsertPhotoToDB(photo db.Photo) error
+	InsertShelflifeToDB(shelf db.Shelflife) error
 }
 
 // Database DatabaseInterface implementation
@@ -52,6 +54,11 @@ func (d *Database) FetchPhotoFromDBByProductID(productID interface{}, side inter
 	return db.FindPhotoByProductID(productID, side, d.Session, d.Database.Name)
 }
 
+// FetchShelflifeFromDBByProductID func
+func (d *Database) FetchShelflifeFromDBByProductID(id interface{}) (db.Shelflife, error) {
+	return db.FindShelflifeByProductID(id, d.Session, d.Database.Name)
+}
+
 // InsertProductToDB func
 func (d *Database) InsertProductToDB(prod db.Product) error {
 	log.Printf("Inserting product %+v to db\n", prod)
@@ -62,4 +69,10 @@ func (d *Database) InsertProductToDB(prod db.Product) error {
 func (d *Database) InsertPhotoToDB(photo db.Photo) error {
 	log.Printf("Inserting photo %+v to db\n", photo)
 	return db.Insert(photo, d.Session, d.Database.Name)
+}
+
+// InsertShelflifeToDB func
+func (d *Database) InsertShelflifeToDB(shelf db.Shelflife) error {
+	log.Printf("Inserting shelflife %+v to db\n", shelf)
+	return db.Insert(shelf, d.Session, d.Database.Name)
 }
