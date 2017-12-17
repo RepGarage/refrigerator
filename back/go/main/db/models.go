@@ -7,9 +7,15 @@ type Product struct {
 	URL       string `json:"url" bson:"url"`
 }
 
-//Photo model
+// Photo model
 type Photo struct {
 	ProductID int    `json:"_id" bson:"_id"`
 	Side      int    `json:"side" bson:"side"`
+	Data      string `json:"data" bson:"data"`
+}
+
+// Shelflife model
+type Shelflife struct {
+	ProductID int    `json:"_id" bson:"_id"`
 	Data      string `json:"data" bson:"data"`
 }
