@@ -26,6 +26,9 @@ export class ListUnitComponent {
         this.p = product;
     }
 
+    @Input()
+    textWhite = false;
+
     get product() {
         return this.p;
     }

@@ -20,12 +20,12 @@ import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class ProductService {
-
+  readonly ADD_PRODUCT_ACTIVE = 'add_product_active';
   private _refrigeratorRef: Observable<AngularFireObject<Refrigerator>>;
   private user: User;
   private selectedRefrigerator: Refrigerator;
   private selectedProduct: BehaviorSubject<Product> = new BehaviorSubject(null);
-  addProductActive: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  addProductActive = new BehaviorSubject(Boolean(localStorage.getItem(this.ADD_PRODUCT_ACTIVE)));
 
   constructor(
       private $afd: AngularFireDatabase,
@@ -88,6 +88,11 @@ export class ProductService {
     }
   }
 
+  setAddProductActive(s: boolean) {
+    this.addProductActive.next(s);
+    s ? localStorage.setItem(this.ADD_PRODUCT_ACTIVE, 'true') : localStorage.removeItem(this.ADD_PRODUCT_ACTIVE);
+  }
+
   /**
    * Add new product to firebase
    * @param product Product object
@@ -134,12 +139,8 @@ export class ProductService {
   fetchProductsListFromApi(name: string): Observable<Array<Product>> {
     return this.$http.get(
       `${this.productsBaseUrl}api/get/products?name=${name}`
-    ).map((r: Array<Product>) => {
-      r = r.map(v => {
-        v.product_id = v.product_id.toString();
-        return v;
-      });
-      return r;
+    ).map((r: Array<{_id: number, name: string}>) => {
+      return r.map(v => new Product({name: v.name, product_id: v._id.toString()}));
     })
     .catch(e => Observable.of([]));
   }

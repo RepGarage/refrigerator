@@ -31,7 +31,8 @@ import { MyMaterialModule } from '../my-material.module';
     ],
     exports: [
         ProductsComponent,
-        SelectedProductComponent
+        SelectedProductComponent,
+        AddProductComponent
     ]
 })
 export class ProductModule {
