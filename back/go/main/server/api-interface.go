@@ -121,7 +121,7 @@ func (p API) GetProductImageFromAPI(httpClient HTTPClient, side interface{}, pro
 }
 
 // GetProductShelfLife return product shelf life
-func (p API) GetProductShelfLife(httpClient http.Client, url string) (string, error) {
+func (p API) GetProductShelfLife(httpClient HTTPClient, url string) (string, error) {
 	var err error
 	var res string
 	var response *http.Response

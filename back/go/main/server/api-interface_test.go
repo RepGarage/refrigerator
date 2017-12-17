@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"strings"
 	"testing"
 
 	server "github.com/centrypoint/refrigerator/back/go/main/server"
@@ -81,20 +82,35 @@ func TestGerProductImageFromAPI(t *testing.T) {
 	gock.Off()
 }
 
+type shelfLifeHTTPClient struct{}
 
-type shelfLifeHTTPClient struct {}
 func (s shelfLifeHTTPClient) Get(url string) (*http.Response, error) {
 	switch url {
 	case "/moloko-syr-yaytsa/syry/hochl-syr-pl-tost-s-vet-lomt-45150g--305146?searchPhrase=ветчина":
-		return http.Response{
-			Body: 
-		}
+		return &http.Response{
+			Body: ioutil.NopCloser(bytes.NewBuffer([]byte("<h4 Условия хранения " + strings.Repeat("\n", 26) + "180 дней" + strings.Repeat("\n", 10)))),
+		}, nil
+	case "/moloko-syr-yaytsa/syry/hochl-syr-55-s-vetch-vann-plavl-400g--308011?searchPhrase=ветчина":
+		return &http.Response{
+			Body: ioutil.NopCloser(bytes.NewBuffer([]byte("<h4 Условия хранения " + strings.Repeat("\n", 26) + "180 дней" + strings.Repeat("\n", 10)))),
+		}, nil
+	case "/konservy-orehi-sousy/myasnye-konservy/elinskiy-vetchina-sterilizov-gost-325g--313010?searchPhrase=ветчина":
+		return &http.Response{
+			Body: ioutil.NopCloser(bytes.NewBuffer([]byte("<h4 Условия хранения " + strings.Repeat("\n", 26) + "365 дней" + strings.Repeat("\n", 10)))),
+		}, nil
+	case "/catalog/moloko-syr-yaytsa/moloko/prav-mol-moloko-past-3-2-4-pet-2l--310201":
+		return &http.Response{
+			Body: ioutil.NopCloser(bytes.NewBuffer([]byte("<h4 Условия хранения " + strings.Repeat("\n", 26) + "25 дней" + strings.Repeat("\n", 10)))),
+		}, nil
 	}
+
+	return &http.Response{}, nil
 }
 func TestGetProductShelfLife(t *testing.T) {
 	var err error
 	var result string
 	var api server.API
+	var httpClient shelfLifeHTTPClient
 	var cases = map[string]string{
 		"/moloko-syr-yaytsa/syry/hochl-syr-pl-tost-s-vet-lomt-45150g--305146?searchPhrase=ветчина":                   "180 дней",
 		"/moloko-syr-yaytsa/syry/hochl-syr-55-s-vetch-vann-plavl-400g--308011?searchPhrase=ветчина":                  "180 дней",
@@ -103,7 +119,7 @@ func TestGetProductShelfLife(t *testing.T) {
 	}
 
 	for k, v := range cases {
-		if result, err = api.GetProductShelfLife(http.Client{}, k); err != nil {
+		if result, err = api.GetProductShelfLife(httpClient, k); err != nil {
 			t.Fatal(err)
 		}
 		assert.Equal(t, v, result)
