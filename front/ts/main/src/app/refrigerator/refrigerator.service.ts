@@ -140,6 +140,15 @@ export class RefrigeratorService {
         });
     }
 
+    updateRefPhoto(photo: string, key: string) {
+      this.$auth.fetchSession()
+        .subscribe((user: User) => {
+          if (user) {
+            this.$afd.object(`/refrigerators/${user.uid}/${key}/photo`).set(photo);
+          }
+        });
+    }
+
     updateRefName(name: string, key: string) {
       this.$auth.fetchSession()
         .subscribe((user: User) => {

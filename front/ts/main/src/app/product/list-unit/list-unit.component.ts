@@ -10,24 +10,23 @@ import { ProductService } from '../product.service';
     styleUrls: [ './list-unit.component.sass' ]
 })
 export class ListUnitComponent {
-    _product: Product;
+    p: Product;
     subscription: Subscription;
 
     constructor(
-        private $sanitizer: DomSanitizer
     ) {}
 
     @Input()
     set product(product: Product) {
         if (product.photoUrl) {
-            product.photoUrl = this.$sanitizer.bypassSecurityTrustUrl(<string>product.photoUrl);
+            product.photoUrl = product.photoUrl;
         } else {
             product.photoUrl = '/assets/icons/groceries.svg';
         }
-        this._product = product;
+        this.p = product;
     }
 
     get product() {
-        return this._product;
+        return this.p;
     }
 }

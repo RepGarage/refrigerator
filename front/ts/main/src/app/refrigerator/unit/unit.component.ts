@@ -42,16 +42,7 @@ export class RefUnitComponent implements OnInit {
     const reader = new FileReader();
     reader.onload = (file) => {
       const photo = file.target['result'];
-      this.$rs.updateRef(
-          {
-            key: this.ref.key,
-            name: this.ref.name,
-            products: this.ref.products,
-            archivedProducts: this.ref.archivedProducts,
-            iconAssetUrl: this.ref.iconAssetUrl,
-            photo
-          }
-      );
+      this.$rs.updateRefPhoto(photo, this.ref.key);
     };
     reader.readAsDataURL(event.target.files[0]);
   }
