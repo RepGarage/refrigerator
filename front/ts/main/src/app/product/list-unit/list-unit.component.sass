@@ -3,6 +3,7 @@
 .grid
   display: grid
   grid-template-rows: 40% 60%
+  height: auto
 
 img
   height: 4em
@@ -11,3 +12,9 @@ img
 
 .text
   text-align: center
+  overflow: hidden
+   text-overflow: ellipsis
+   display: -webkit-box
+   -webkit-box-orient: vertical
+   -webkit-line-clamp: 2 /* number of lines to show */
+   line-height: 2        /* fallback */

@@ -17,7 +17,7 @@
           <a class="nav-link" [routerLink]="['/r/refrigerators', ref.key]">Продукты</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link">Добавить продукт</a>
+          <a class="nav-link" (click)="triggerAddProductState()" >Добавить продукт</a>
         </li>
       </ul>
     </div>

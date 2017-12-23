@@ -1,3 +1,4 @@
+import { ProductService } from './../../product/product.service';
 import { Observable } from 'rxjs/Observable';
 import { Component, OnInit } from '@angular/core';
 import { RefrigeratorService } from '../refrigerator.service';
@@ -13,12 +14,20 @@ export class RefMenuComponent implements OnInit {
   newName: string;
   editingName = false;
   constructor(
-    private $rs: RefrigeratorService
+    private $rs: RefrigeratorService,
+    private $ps: ProductService
   ) {}
 
   ngOnInit() {
     this.selectedRefrigerator = this.$rs.selectedRefrigerator;
     this.selectedRefrigerator.subscribe((r: Refrigerator) => this.newName = r.name);
+  }
+
+  /**
+   * Trigger add product activity state
+   */
+  triggerAddProductState() {
+    this.$ps.triggerAddProductState();
   }
 
   updateName() {

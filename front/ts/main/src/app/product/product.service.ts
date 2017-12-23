@@ -13,8 +13,6 @@ import {
     AngularFireObject
 } from 'angularfire2/database';
 import { AuthService } from '../accounting/auth.service';
-import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/observable/of';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { HttpClient } from '@angular/common/http';
 
@@ -25,7 +23,7 @@ export class ProductService {
   private user: User;
   private selectedRefrigerator: Refrigerator;
   private selectedProduct: BehaviorSubject<Product> = new BehaviorSubject(null);
-  addProductActive = new BehaviorSubject(Boolean(localStorage.getItem(this.ADD_PRODUCT_ACTIVE)));
+  private addProductActive = new BehaviorSubject(Boolean(localStorage.getItem(this.ADD_PRODUCT_ACTIVE)));
 
   constructor(
       private $afd: AngularFireDatabase,
@@ -73,6 +71,7 @@ export class ProductService {
                     name: value[key]['name'],
                     created: value[key]['created'],
                     shelf: value[key]['shelf'],
+                    exp: value[key]['exp'],
                     moved: value[key]['moved']
                   })
                 );
@@ -88,6 +87,20 @@ export class ProductService {
     }
   }
 
+  /**
+   * Trigger add product state
+   */
+  triggerAddProductState() {
+    this.addProductActive.next(!this.addProductActive.getValue());
+    this.addProductActive.getValue()
+      ? localStorage.setItem(this.ADD_PRODUCT_ACTIVE, 'true')
+      : localStorage.removeItem(this.ADD_PRODUCT_ACTIVE);
+  }
+
+  /**
+   * Set certain add product state
+   * @param s state
+   */
   setAddProductActive(s: boolean) {
     this.addProductActive.next(s);
     s ? localStorage.setItem(this.ADD_PRODUCT_ACTIVE, 'true') : localStorage.removeItem(this.ADD_PRODUCT_ACTIVE);
@@ -136,6 +149,10 @@ export class ProductService {
     return this.selectedProduct;
   }
 
+  /**
+   * Search for products
+   * @param name product query
+   */
   fetchProductsListFromApi(name: string): Observable<Array<Product>> {
     return this.$http.get(
       `${this.productsBaseUrl}api/get/products?name=${name}`
@@ -145,6 +162,11 @@ export class ProductService {
     .catch(e => Observable.of([]));
   }
 
+  /**
+   * Get product image
+   * @param p product
+   * @param side size
+   */
   fetchProductImageFromAPI(p: Product, side: number): Observable<string> {
     return this.$http.get(
       `${this.productsBaseUrl}api/get/product/image?product_id=${p.product_id}&side=${side}`)
@@ -152,5 +174,10 @@ export class ProductService {
       .catch(() => Observable.of(null));
   }
 
+  fetchProductShelflife(id: string): Observable<string> {
+    return this.$http.get(`${this.productsBaseUrl}api/get/product/shelflife?product_id=${id}`)
+      .map((response: { result: string }) => response.result)
+      .catch(() => Observable.of(''));
+  }
 
 }

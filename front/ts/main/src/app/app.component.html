@@ -19,4 +19,6 @@
 <app-ref-menu></app-ref-menu>
 
 <!-- ADD PRODUCT POPUP -->
-<app-add-product></app-add-product>
+<ng-container *ngIf="addProductActive | async">
+  <app-add-product></app-add-product>
+</ng-container>
