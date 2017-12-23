@@ -19,6 +19,8 @@ type APIHandler struct {
 // GetProductsHandler handler
 func (a *APIHandler) GetProductsHandler() func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Add("Access-Control-Allow-Origin", "http://localhost:4200")
+		w.Header().Add("Content-Type", "application/json")
 		log.Printf("%v %v", r.Method, r.URL.Path)
 		productsAPI.GetProductsHandler(a.apiInterface, a.dbi, w, r)
 	}
@@ -27,6 +29,8 @@ func (a *APIHandler) GetProductsHandler() func(w http.ResponseWriter, r *http.Re
 // GetProductImageHandler handler
 func (a *APIHandler) GetProductImageHandler() func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Add("Access-Control-Allow-Origin", "http://localhost:4200")
+		w.Header().Add("Content-Type", "application/json")
 		log.Printf("%v %v", r.Method, r.URL.Path)
 		productsAPI.GetProductImageHandler(a.apiInterface, a.dbi, w, r)
 	}
@@ -35,6 +39,8 @@ func (a *APIHandler) GetProductImageHandler() func(w http.ResponseWriter, r *htt
 // GetProductShelflifeHandler handler
 func (a *APIHandler) GetProductShelflifeHandler() func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Add("Access-Control-Allow-Origin", "http://localhost:4200")
+		w.Header().Add("Content-Type", "application/json")
 		log.Printf("%v %v", r.Method, r.URL.Path)
 		productsAPI.GetProductShelflifeHandler(a.apiInterface, a.dbi, w, r)
 	}

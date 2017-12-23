@@ -18,8 +18,7 @@ func (p *ProductsAPI) GetProductsHandler(
 	dbi DatabaseInterface,
 	w http.ResponseWriter,
 	r *http.Request) {
-	w.Header().Add("Access-Control-Allow-Origin", "http://localhost:4200")
-	w.Header().Add("Content-Type", "application/json")
+
 	name := r.URL.Query().Get("name")
 	if len(name) == 0 {
 		w.WriteHeader(400)
@@ -51,8 +50,6 @@ func (p *ProductsAPI) GetProductImageHandler(
 	w http.ResponseWriter,
 	r *http.Request) {
 
-	w.Header().Add("Access-Control-Allow-Origin", "http://localhost:4200")
-	w.Header().Add("Content-Type", "application/json")
 	productID := r.URL.Query().Get("product_id")
 	side := r.URL.Query().Get("side")
 	if len(productID) < 1 {
@@ -139,8 +136,6 @@ func (p *ProductsAPI) GetProductShelflifeHandler(
 			log.Println(err)
 			return
 		}
-
-		log.Println(result)
 
 		if response, err = json.Marshal(map[string]string{"result": result}); err != nil {
 			w.WriteHeader(500)
