@@ -1,8 +1,6 @@
-<div class="product-unit">
-  <div class="flex-box">
-    <img [src]="product.photoUrl" alt="product-unit-image">
-    <div>
-      <p class="name" >{{ product.name }}</p>
-    </div>
+<div class="grid pointer">
+  <img [src]="product.photoUrl" class="card-img-top mr-3">
+  <div class="text" [ngClass]="{'text-white': textWhite}">
+    {{ product.name }}
   </div>
 </div>

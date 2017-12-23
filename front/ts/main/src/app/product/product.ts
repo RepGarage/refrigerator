@@ -5,6 +5,7 @@ export class Product {
   created: string;
   moved: string;
   shelf: string;
+  exp: string;
   product_id: string;
   key: string;
 
@@ -14,6 +15,7 @@ export class Product {
     created = '',
     moved = '',
     shelf = '',
+    exp = '',
     product_id = '',
     key = ''
   }) {
@@ -22,6 +24,7 @@ export class Product {
     this.created = created;
     this.moved = moved;
     this.shelf = shelf;
+    this.exp = exp;
     this.product_id = product_id;
     this.key = key;
   }

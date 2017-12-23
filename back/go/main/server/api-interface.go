@@ -4,6 +4,7 @@ import (
 	b64 "encoding/base64"
 	"encoding/json"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"os"
 	"strconv"
@@ -138,15 +139,24 @@ func (p API) GetProductShelfLife(httpClient HTTPClient, url string) (string, err
 	}
 
 	var bodyRows = strings.Split(string(body), "\n")
+	log.Println("FOCKEN ERROR")
 
 	for i, v := range bodyRows {
 
 		// fmt.Println(v)
 		if strings.HasPrefix(strings.Trim(v, " "), "<h4") && strings.Contains(v, "Условия хранения") {
-			if strings.HasPrefix(strings.Trim(bodyRows[i+28], " "), "</a") {
-				res = strings.Trim(bodyRows[i+27], " ")
-			} else {
-				res = strings.Trim(bodyRows[i+26], " ")
+			for index, value := range bodyRows[i : i+60] {
+				if strings.Contains(value, "Срок хранения макс.") || strings.Contains(value, "Срок хранения") {
+					// for _, valueI := range bodyRows[i+index : i+index+7] {
+					// 	fmt.Println(strings.Trim(valueI, " "))
+					// }
+					if strings.HasPrefix(strings.Trim(bodyRows[i+index+3], " "), "<a") {
+						res = strings.Trim(bodyRows[i+index+5], " ")
+					} else {
+						res = strings.Trim(bodyRows[i+index+4], " ")
+					}
+					break
+				}
 			}
 			break
 		}

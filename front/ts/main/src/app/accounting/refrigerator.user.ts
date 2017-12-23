@@ -1,5 +1,3 @@
-import { IRefrigerator } from '../refrigerator/refrigerator';
-
 export interface IRefUser {
     key: string;
     refrigeratorsIds?: Object;

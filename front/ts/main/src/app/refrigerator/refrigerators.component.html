@@ -9,12 +9,21 @@
 </div>
 <div class="container">
   <div class="row">
-    <ng-container *ngIf="(refrigerators | async); let refs">
+    <ng-container *ngIf="(refrigerators | async); let refs; else refsPlaceholder">
       <ng-container *ngFor="let ref of refs">
         <div class="col-sm">
           <app-ref-unit [ref]="ref"></app-ref-unit>
         </div>
       </ng-container>
     </ng-container>
+    <ng-template #refsPlaceholder>
+      <ng-container *ngFor="let _ of (refrigeratorsCount | async)">
+        <div class="col-sm">
+          <div class="card">
+            
+          </div>
+        </div>
+      </ng-container>
+    </ng-template>
   </div>
 </div>

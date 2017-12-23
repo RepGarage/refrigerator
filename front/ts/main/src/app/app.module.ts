@@ -1,3 +1,4 @@
+import { SharedModule } from './shared.module';
 import { AppRoutesModule } from './app.routes';
 import { AuthGuard } from './accounting/auth.guard';
 import { BrowserModule } from '@angular/platform-browser';
@@ -51,7 +52,8 @@ import { AuthService } from './accounting/auth.service';
     AppRoutesModule,
     AngularFireModule.initializeApp(environment.firebaseSecret),
     AngularFireDatabaseModule,
-    AngularFireAuthModule
+    AngularFireAuthModule,
+    SharedModule.forRoot()
   ],
   providers: [
     ProductService,

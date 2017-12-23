@@ -27,6 +27,7 @@ export class AppComponent implements OnInit {
   selectedProduct: Observable<Product>;
   authState: Observable<User>;
   selectedProductState = 'none';
+  addProductActive: Observable<boolean>;
 
   constructor(
     private router: Router,
@@ -37,6 +38,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.authState = this.$authService.fetchSession();
+    this.addProductActive = this.$productService.addProductActive;
     this.addSubscriptions();
   }
 

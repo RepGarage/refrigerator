@@ -1,63 +1,46 @@
-<div class="modal" (click)="fadeToBlack()"></div>
-<div class="content fixed z-199">
-  <div class="block-header">
-    Добавить новый продукт
-  </div>
-  <div class="block-body round-bottom wrapped">
-    <div class="search-block" *ngIf="!(selectedProduct | async); else productDetail">
-      <input class="input" [formControl]="productName">
-      <div class="search-results" *ngIf="(availableProducts | async); let prods">
-        <ng-container *ngFor="let p of prods">
-          <app-prod-list-unit (click)="selectProduct(p)" [product]="p"></app-prod-list-unit>
+<div class="slider" [@state]="animationState">
+  <div class="container bg-dark h-100">
+    <ng-container *ngIf="state === addState.SEARCH; else addForm">
+      <div class="row">
+        <div class="col-sm-4"></div>
+        <div class="col-sm-4">
+          <input #queryEl [formControl]="query" type="text" class="w-100 input">
+        </div>
+        <div class="col-sm-4"></div>
+      </div>
+      <hr class="bg-warning">
+      <!-- query results -->
+      <div class="query-result" *ngIf="queryResult | async as result">
+        <ng-container *ngFor="let prod of result; index as i">
+          <ng-container *ngIf="i % 4 === 0">
+            <div class="row">
+              <ng-container *ngFor="let p of result.slice(i - 4, i)">
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <app-prod-list-unit (click)="selectProduct(p)" [textWhite]="true" [product]="p"></app-prod-list-unit>
+                </div>
+              </ng-container>
+            </div>
+          </ng-container>
         </ng-container>
       </div>
-    </div>
-    <ng-template #productDetail>
-      <ng-container *ngIf="(selectedProduct | async); let p">
-        <div class="detailed-block">
-          <div class="nav back">
-            <img src="/assets/icons/ic_reply_black.svg" alt="back" (click)="selectProduct(null)">
-            <span class="title">{{ p.name }}</span>
+    </ng-container>
+    <ng-template #addForm>
+      <ng-container *ngIf="(selectedProduct | async); let prod">
+        <div class="flex p-3">
+          <mat-icon class="pointer text-white" (click)="backToSearch()" >keyboard_arrow_left</mat-icon>
+          <h4 class="text-white text-center">{{ prod.name }}</h4>
+        </div>
+        <div class="row">
+          <div class="col-lg-4"><img [src]="prod.photoUrl ? prod.photoUrl : ''" alt=""></div>
+          <div class="col-lg-4">
+            <h4 class="text-white">Срок хранения: {{ prod.shelf }}</h4>
           </div>
-          <div class="details-block">
-            <form [formGroup]="selectedProductFormGroup">
-              <div class="form-field">
-                <div class="form-field-header">
-                  Изготовлено
-                </div>
-                <mat-form-field class="width-100">
-                  <input matInput [matDatepicker]="created" formControlName="created">
-                  <mat-datepicker-toggle matSuffix [for]="created"></mat-datepicker-toggle>
-                  <mat-datepicker #created></mat-datepicker>
-                </mat-form-field>
-              </div>
-              <div class="form-field">
-                <div class="form-field-header">
-                  Срок годности
-                </div>
-                <mat-form-field class="width-100">
-                  <input matInput [matDatepicker]="shelf" formControlName="shelf">
-                  <mat-datepicker-toggle matSuffix [for]="shelf"></mat-datepicker-toggle>
-                  <mat-datepicker #shelf></mat-datepicker>
-                </mat-form-field>
-              </div>
-              <div class="form-field">
-                <div class="form-field-header">
-                  Убрано
-                </div>
-                <mat-form-field class="width-100">
-                  <input matInput [matDatepicker]="moved" formControlName="moved">
-                  <mat-datepicker-toggle matSuffix [for]="moved"></mat-datepicker-toggle>
-                  <mat-datepicker #moved></mat-datepicker>
-                </mat-form-field>
-              </div>
-            </form>
-          </div>
-          <div class="block-footer add-button" (click)="addProduct(p)">
-            Добавить
-          </div>
+          <div class="col-lg-4"></div>
         </div>
       </ng-container>
     </ng-template>
   </div>
 </div>
+
+<!-- MODAL -->
+<div class="--modal pointer" [@modalState]="modalState" (click)="destroy()"></div>

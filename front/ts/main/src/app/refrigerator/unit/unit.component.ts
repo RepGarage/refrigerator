@@ -1,3 +1,5 @@
+import { Router } from '@angular/router';
+import { Observable } from 'rxjs/Observable';
 import { RefrigeratorService } from './../refrigerator.service';
 import { AbstractControl, FormControl } from '@angular/forms';
 import { Refrigerator } from './../refrigerator';
@@ -10,19 +12,27 @@ import { Component, Input, OnInit, ViewChild, ElementRef } from '@angular/core';
 })
 export class RefUnitComponent implements OnInit {
   @Input() ref: Refrigerator;
-
   photo: string;
+  selected: Observable<boolean>;
 
   @ViewChild('photoInput')
   private photoInputRef: ElementRef;
 
+  /**
+   * CONSTRUCTOR
+   */
   constructor(
-    private $refService: RefrigeratorService
+    private $rs: RefrigeratorService,
+    private $router: Router
   ) {}
 
   ngOnInit() {
+    this.selected = this.$rs.selectedRefrigerator.map(r => r ? r.key === this.ref.key : false);
   }
 
+  /**
+   * FUNCTIONS
+   */
   triggerPhotoInput() {
     this.photoInputRef.nativeElement.click();
   }
@@ -34,19 +44,18 @@ export class RefUnitComponent implements OnInit {
     const reader = new FileReader();
     reader.onload = (file) => {
       const photo = file.target['result'];
-      console.log(file);
-      this.$refService.updateRef(
-          {
-            key: this.ref.key,
-            name: this.ref.name,
-            products: this.ref.products,
-            archivedProducts: this.ref.archivedProducts,
-            iconAssetUrl: this.ref.iconAssetUrl,
-            photo
-          }
-      );
+      this.$rs.updateRefPhoto(photo, this.ref.key);
     };
     reader.readAsDataURL(event.target.files[0]);
+  }
+
+  select() {
+    this.$rs.selectRefrigerator(this.ref);
+  }
+
+  selectAndRedirect() {
+    this.select();
+    this.$router.navigate(['/r/refrigerators', this.ref.key]);
   }
 
   getProductsLength(products: object) {
