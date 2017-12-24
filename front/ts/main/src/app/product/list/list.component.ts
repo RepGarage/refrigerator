@@ -34,6 +34,6 @@ export class ProductListComponent implements OnInit {
   }
 
   triggerAddProduct() {
-    this.$productService.addProductActive.next(true);
+    this.$productService.setAddProductActive(true);
   }
 }

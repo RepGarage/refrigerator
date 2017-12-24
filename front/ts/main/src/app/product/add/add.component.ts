@@ -127,9 +127,9 @@ export class AddProductComponent implements OnInit, OnDestroy, AfterViewInit {
     const to = moment();
     const diff = to.diff(from, 'days');
     const product = this.selectedProduct.getValue();
-    const shelf = product.shelf ? product.shelf.split(/\s/)[0] : null;
+    const shelf = product.shelf ? product.shelf : null;
     if (!shelf) { return; }
-    const exp = parseInt(shelf, 10) - diff;
+    const exp = shelf - diff;
     return exp.toString();
   }
 

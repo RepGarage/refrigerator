@@ -51,6 +51,10 @@ export class ProductService {
     }
   }
 
+  fetchAddProductActive() {
+    return this.addProductActive;
+  }
+
   /**
    * Fetch products
    */
@@ -174,10 +178,10 @@ export class ProductService {
       .catch(() => Observable.of(null));
   }
 
-  fetchProductShelflife(id: string): Observable<string> {
+  fetchProductShelflife(id: string): Observable<number> {
     return this.$http.get(`${this.productsBaseUrl}api/get/product/shelflife?product_id=${id}`)
-      .map((response: { result: string }) => response.result)
-      .catch(() => Observable.of(''));
+      .map((response: { result: number }) => response.result)
+      .catch(() => Observable.of(0));
   }
 
 }

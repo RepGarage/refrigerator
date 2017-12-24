@@ -38,7 +38,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.authState = this.$authService.fetchSession();
-    this.addProductActive = this.$productService.addProductActive;
+    this.addProductActive = this.$productService.fetchAddProductActive();
     this.addSubscriptions();
   }
 

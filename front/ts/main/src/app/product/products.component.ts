@@ -44,7 +44,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
         (prods: Array<Product>) => prods.map(
           p => { p.photoUrl = this.$dom.bypassSecurityTrustUrl(<string>p.photoUrl); return p; }));
     this.selectedProduct = this.$productService.fetchSelectedProduct();
-    this.addProductActive = this.$productService.addProductActive;
+    this.addProductActive = this.$productService.fetchAddProductActive();
   }
 
   ngOnDestroy() {
