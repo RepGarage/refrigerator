@@ -16,6 +16,6 @@ type Photo struct {
 
 // Shelflife model
 type Shelflife struct {
-	ProductID int    `json:"_id" bson:"_id"`
-	Data      string `json:"data" bson:"data"`
+	ProductID int `json:"_id" bson:"_id"`
+	Data      int `json:"data" bson:"data"`
 }

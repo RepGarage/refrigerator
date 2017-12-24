@@ -5,7 +5,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
-	"strings"
 	"testing"
 
 	server "github.com/centrypoint/refrigerator/back/go/main/server"
@@ -80,6 +79,7 @@ func TestGerProductImageFromAPI(t *testing.T) {
 	}
 	assert.Equal(t, true, len(resultInt) > 0, "result length should be more than 0")
 	gock.Off()
+
 }
 
 // type shelfLifeHTTPClient struct{}
@@ -124,4 +124,4 @@ func TestGerProductImageFromAPI(t *testing.T) {
 // 		}
 // 		assert.Equal(t, v, result)
 // 	}
-}
+// }

@@ -38,8 +38,8 @@ func (m apiInterfaceMock) GetProducts(c server.HTTPClient, name string) ([]db.Pr
 	}
 }
 
-func (m apiInterfaceMock) GetProductShelfLife(httpClient server.HTTPClient, url string) (string, error) {
-	return "", nil
+func (m apiInterfaceMock) GetProductShelfLife(httpClient server.HTTPClient, url string) (int, error) {
+	return 0, nil
 }
 
 func (p apiInterfaceMock) GetProductImageFromAPI(httpClient server.HTTPClient, side interface{}, productID interface{}) (string, error) {
