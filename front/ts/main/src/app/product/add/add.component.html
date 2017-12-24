@@ -1,5 +1,4 @@
-<div class="slider" [@state]="animationState">
-  <div class="container bg-dark h-100">
+<app-modal-view [state]="animationState" [modalState]="modalState" [destroy]="destroy" [context]="this">
     <ng-container *ngIf="state === addState.SEARCH; else addForm">
       <div class="row">
         <div class="col-sm-4"></div>
@@ -21,39 +20,35 @@
               </ng-container>
             </div>
           </ng-container>
-        </ng-container>
-      </div>
-    </ng-container>
-    <ng-template #addForm>
-      <ng-container *ngIf="(selectedProduct | async); let prod">
-        <div class="flex p-3">
-          <mat-icon class="pointer text-white" (click)="backToSearch()" >keyboard_arrow_left</mat-icon>
-          <h4 class="text-white text-center">{{ prod.name }}</h4>
-        </div>
-        <hr>
-        <div class="row bg-white">
-          <div class="col-lg-6"><img class="h-100" [src]="prod.photoUrl ? prod.photoUrl : ''" alt=""></div>
-          <div class="col-lg-6">
-            <h4>Срок хранения: {{ prod.shelf }}</h4>
-            <h4>Оставшийся срок годности: {{ exp }}</h4>
-            <mat-form-field class="w-100">
-              <input matInput [matDatepicker]="createdPicker" placeholder="Дата изготовления" [formControl]="created">
-              <mat-datepicker-toggle matSuffix [for]="createdPicker"></mat-datepicker-toggle>
-              <mat-datepicker #createdPicker></mat-datepicker>
-            </mat-form-field>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-lg-4"></div>
-          <div class="col-lg-4">
-            <button (click)="addProduct()" class="btn btn-primary btn-lg btn-block pointer mt-2">Добaвить</button>
-          </div>
-          <div class="col-lg-4"></div>
+          </ng-container>
         </div>
       </ng-container>
-    </ng-template>
-  </div>
-</div>
-
-<!-- MODAL -->
-<div class="--modal pointer" [@modalState]="modalState" (click)="destroy()"></div>
+      <ng-template #addForm>
+        <ng-container *ngIf="(selectedProduct | async); let prod">
+          <div class="flex p-3">
+            <mat-icon class="pointer text-white" (click)="backToSearch()" >keyboard_arrow_left</mat-icon>
+            <h4 class="text-white text-center">{{ prod.name }}</h4>
+          </div>
+          <hr>
+          <div class="row bg-white">
+            <div class="col-lg-6"><img class="h-100" [src]="prod.photoUrl ? prod.photoUrl : ''" alt=""></div>
+            <div class="col-lg-6">
+              <h4>Срок хранения: {{ prod.shelf }}</h4>
+              <h4>Оставшийся срок годности: {{ exp }}</h4>
+              <mat-form-field class="w-100">
+                <input matInput [matDatepicker]="createdPicker" placeholder="Дата изготовления" [formControl]="created">
+                <mat-datepicker-toggle matSuffix [for]="createdPicker"></mat-datepicker-toggle>
+                <mat-datepicker #createdPicker></mat-datepicker>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-4"></div>
+            <div class="col-lg-4">
+              <button (click)="addProduct()" class="btn btn-primary btn-lg btn-block pointer mt-2">Добaвить</button>
+            </div>
+            <div class="col-lg-4"></div>
+          </div>
+        </ng-container>
+      </ng-template>
+</app-modal-view>

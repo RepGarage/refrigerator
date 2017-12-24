@@ -22,3 +22,8 @@
 <ng-container *ngIf="addProductActive | async">
   <app-add-product></app-add-product>
 </ng-container>
+
+<!-- SELECTED PRODUCT -->
+<ng-container *ngIf="selectedProduct | async">
+  <app-selected-product></app-selected-product>
+</ng-container>

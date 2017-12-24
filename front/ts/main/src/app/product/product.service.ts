@@ -19,11 +19,12 @@ import { HttpClient } from '@angular/common/http';
 @Injectable()
 export class ProductService {
   readonly ADD_PRODUCT_ACTIVE = 'add_product_active';
+  readonly SELECTED_PRODUCT = 'selected_product';
   private _refrigeratorRef: Observable<AngularFireObject<Refrigerator>>;
   private user: User;
   private selectedRefrigerator: Refrigerator;
-  private selectedProduct: BehaviorSubject<Product> = new BehaviorSubject(null);
   private addProductActive = new BehaviorSubject(Boolean(localStorage.getItem(this.ADD_PRODUCT_ACTIVE)));
+  private selectedProduct = new BehaviorSubject(JSON.parse(localStorage.getItem(this.SELECTED_PRODUCT)));
 
   constructor(
       private $afd: AngularFireDatabase,

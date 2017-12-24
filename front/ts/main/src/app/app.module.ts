@@ -39,8 +39,7 @@ import { AppModalViewComponent } from './modal/modal.component';
   declarations: [
     AppComponent,
     AuthComponent,
-    LoginComponent,
-    AppModalViewComponent
+    LoginComponent
   ],
   imports: [
     BrowserModule,
