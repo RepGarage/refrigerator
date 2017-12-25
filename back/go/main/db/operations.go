@@ -25,6 +25,9 @@ func Insert(model interface{}, sess *mgo.Session, dbName string) error {
 	case Photo:
 		e := cloneSess.DB(dbName).C("photos").Insert(model)
 		return e
+	case Shelflife:
+		e := cloneSess.DB(dbName).C("shelflife").Insert(model)
+		return e
 	default:
 		return UnknownModelError{}
 
@@ -77,5 +80,24 @@ func FindProductByID(id interface{}, sess *mgo.Session, dbName string) (Product,
 		break
 	}
 	e := cloneSess.DB(dbName).C("products").Find(bson.M{"_id": iID}).One(&result)
+	return result, e
+}
+
+// FindShelflifeByProductID func
+func FindShelflifeByProductID(id interface{}, sess *mgo.Session, dbName string) (Shelflife, error) {
+	cloneSess := sess.Clone()
+	defer cloneSess.Close()
+	var result Shelflife
+	var iID int
+	// Converts
+	switch v := id.(type) {
+	case string:
+		iID, _ = strconv.Atoi(v)
+		break
+	case int:
+		iID = v
+		break
+	}
+	e := cloneSess.DB(dbName).C("shelflife").Find(bson.M{"_id": iID}).One(&result)
 	return result, e
 }

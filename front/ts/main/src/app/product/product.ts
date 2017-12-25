@@ -4,7 +4,8 @@ export class Product {
   name: string;
   created: string;
   moved: string;
-  shelf: string;
+  shelf: number;
+  exp: string;
   product_id: string;
   key: string;
 
@@ -13,7 +14,8 @@ export class Product {
     name = '',
     created = '',
     moved = '',
-    shelf = '',
+    shelf = 0,
+    exp = '',
     product_id = '',
     key = ''
   }) {
@@ -22,6 +24,7 @@ export class Product {
     this.created = created;
     this.moved = moved;
     this.shelf = shelf;
+    this.exp = exp;
     this.product_id = product_id;
     this.key = key;
   }

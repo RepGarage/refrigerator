@@ -1,4 +1,4 @@
-<div class="card pointer">
+<div class="card pointer" (click)="select()" [ngClass]="{'bg-info': (selected | async), 'text-white': (selected | async)}">
   <ng-container *ngIf="ref.photo; else noPhoto">
     <div (click)="triggerPhotoInput()" class="photo-placeholder">
       <img class="card-img-top" [src]="ref.photo" alt="Card image cap">
@@ -20,7 +20,7 @@
     </div>
   </div>
   <div class="card-footer text-center">
-    <a class="text-primary">Выбрать</a>
+    <a [ngClass]="{'text-primary': !(selected | async), 'text-white': (selected | async)}" (click)="selectAndRedirect()">Выбрать</a>
   </div>
 </div>
 <input #photoInput type="file" class="hidden" (change)="photoFileChanged($event)" >

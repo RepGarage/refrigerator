@@ -3,37 +3,18 @@
 
 @include scrollbars(0.5em, silver)
 
-.content
-  top: 30%
-  left: 30%
-  width: 40vw
-.block-body
-  max-height: 40vh
+// mat-form-field
+//   padding: 0 12px
+
+.input
+  box-shadow: none
+  border-top: none
+  padding: 2px 4px
+  &:focus
+    box-shadow: none
+    outline: none
+
+.query-result
+  height: 88%
   overflow-y: auto
-  background-color: white
-  display: grid
-  .search-block
-    margin: 8px
-    display: grid
-    grid-template-columns: 1fr
-    grid-template-rows: 10% 90%
-  .search-results
-    display: grid
-    grid-template-columns: 1fr 1fr 1fr
-    grid-gap: 4px
-.back
-  .title
-    text-align: center
-  img 
-    height: 100%
-    cursor: pointer
-.details-block
-  padding: 8px
-.add-button
-  cursor: pointer
-  background-color: #b2c9ff
-  &:hover
-    background-color: #a2beff
-  &:active
-    background-color: #8aadff
-    
+  overflow-x: hidden

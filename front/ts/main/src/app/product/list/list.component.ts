@@ -17,9 +17,6 @@ export class ProductListComponent implements OnInit {
   @Input()
   selectedProduct: Subject<Product> = new Subject();
 
-  @Output()
-  productWasSelected = new EventEmitter<Product>();
-
   constructor(
       private $productService: ProductService,
       private ar: ActivatedRoute,
@@ -30,10 +27,10 @@ export class ProductListComponent implements OnInit {
   }
 
   select(product: Product) {
-    this.productWasSelected.emit(product);
+    this.$productService.selectProduct(product);
   }
 
   triggerAddProduct() {
-    this.$productService.addProductActive.next(true);
+    this.$productService.setAddProductActive(true);
   }
 }

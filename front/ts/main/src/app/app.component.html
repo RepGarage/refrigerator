@@ -1,34 +1,3 @@
-<!-- <div class="navbar is-warning">
-    <div class="navbar-brand">
-      <div class="navbar-item">
-        <a class="is-size-3">Refrigerator control</a>
-      </div>
-    </div>
-    <div class="navbar-menu">
-      <div class="navbar-end">
-        <ng-container *ngIf="(authState | async); let auth">
-          <div class="navbar-item">
-            <img [src]="auth.photoURL" alt="avatar">
-          </div>
-          <div class="navbar-item has-dropdown is-hoverable">
-            <a class="navbar-link">
-              {{ auth.displayName }}
-            </a>
-
-            <div class="navbar-dropdown">
-              <a class="navbar-item" (click)="logout()">
-                Выйти
-              </a>
-            </div>
-          </div>
-        </ng-container>
-      </div>
-    </div>
-</div>
-<div class="container">
-  <router-outlet></router-outlet>
-</div> -->
-
 <mat-toolbar color="accent">
   <span>Refrigerator Control</span>
   <div class="header-spacer"></div>
@@ -46,6 +15,15 @@
   <router-outlet></router-outlet>
 </div>
 
+<!-- REFRIGERATOR MENU -->
+<app-ref-menu></app-ref-menu>
 
+<!-- ADD PRODUCT POPUP -->
+<ng-container *ngIf="addProductActive | async">
+  <app-add-product></app-add-product>
+</ng-container>
 
-
+<!-- SELECTED PRODUCT -->
+<ng-container *ngIf="selectedProduct | async">
+  <app-selected-product></app-selected-product>
+</ng-container>

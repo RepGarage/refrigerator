@@ -1,6 +1,6 @@
 import { RefrigeratorService } from './../refrigerator.service';
 import { Component, OnInit } from '@angular/core';
-import { IRefrigerator, Refrigerator } from '../refrigerator';
+import { Refrigerator } from '../refrigerator';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Component({

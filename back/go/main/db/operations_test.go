@@ -37,6 +37,29 @@ func TestInsertProduct(t *testing.T) {
 	sess.DB(dbName).C("products").DropCollection()
 }
 
+func TestInsertShelflife(t *testing.T) {
+	sess, e := mgo.Dial(mongoURL)
+	if e != nil {
+		t.Error(e)
+	}
+	var testShelflife = db.Shelflife{
+		ProductID: 1,
+		Data:      180,
+	}
+	err := db.Insert(testShelflife, sess, dbName)
+	if err != nil {
+		sess.DB(dbName).C("shelflife").DropCollection()
+		t.Error(err)
+	}
+	c, e := sess.DB(dbName).C("shelflife").Count()
+	if e != nil {
+		sess.DB(dbName).C("shelflife").DropCollection()
+		t.Error(e)
+	}
+	assert.Equal(t, 1, c, "shelflife collection size should be 1")
+	sess.DB(dbName).C("shelflife").DropCollection()
+}
+
 func TestInsertPhoto(t *testing.T) {
 	sess, e := mgo.Dial(mongoURL)
 	if e != nil {
@@ -106,6 +129,39 @@ func TestFindProductByID(t *testing.T) {
 	assert.Equal(t, 1, pString.ProductID, "productID should be 1")
 
 	sess.DB(dbName).C("products").DropCollection()
+}
+
+func TestFindShelflifeByProductID(t *testing.T) {
+	var session *mgo.Session
+	var err error
+	var shelf db.Shelflife
+	if session, err = mgo.Dial(mongoURL); err != nil {
+		t.Fatal(err)
+	}
+	var testShelflife = db.Shelflife{
+		ProductID: 1,
+		Data:      180,
+	}
+	if err = db.Insert(testShelflife, session, dbName); err != nil {
+		t.Fatal(err)
+	}
+	if shelf, err = db.FindShelflifeByProductID(testShelflife.ProductID, session, dbName); err != nil {
+		session.DB(dbName).C("shelflife").DropCollection()
+		t.Fatal(err)
+	}
+
+	assert.Equal(t, 180, shelf.Data)
+	assert.Equal(t, 1, shelf.ProductID, "productID should be 1")
+
+	if shelf, err = db.FindShelflifeByProductID("1", session, dbName); err != nil {
+		session.DB(dbName).C("shelflife").DropCollection()
+		t.Fatal(err)
+	}
+
+	assert.Equal(t, 180, shelf.Data)
+	assert.Equal(t, 1, shelf.ProductID, "productID should be 1")
+
+	session.DB(dbName).C("shelflife").DropCollection()
 }
 
 func TestFindPhotoByProductIDAndSide(t *testing.T) {

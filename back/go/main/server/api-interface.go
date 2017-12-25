@@ -9,6 +9,8 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/centrypoint/refrigerator/back/go/main/server/helpers"
+
 	"github.com/centrypoint/refrigerator/back/go/main/db"
 )
 
@@ -22,7 +24,7 @@ var (
 type APIInterface interface {
 	GetProducts(httpClient HTTPClient, name string) ([]db.Product, error)
 	GetProductImageFromAPI(httpClient HTTPClient, side interface{}, productID interface{}) (string, error)
-	GetProductShelfLife(httpClient HTTPClient, url string) (string, error)
+	GetProductShelfLife(httpClient HTTPClient, url string) (int, error)
 }
 
 // API ApiInterface implementation
@@ -122,19 +124,19 @@ func (p API) GetProductImageFromAPI(httpClient HTTPClient, side interface{}, pro
 }
 
 // GetProductShelfLife return product shelf life
-func (p API) GetProductShelfLife(httpClient HTTPClient, url string) (string, error) {
+func (p API) GetProductShelfLife(httpClient HTTPClient, url string) (int, error) {
 	var err error
-	var res string
+	var res int
 	var response *http.Response
 	var body []byte
 
 	if response, err = httpClient.Get(productsBaseURL + url); err != nil {
-		return "", err
+		return 0, err
 	}
 
 	defer response.Body.Close()
 	if body, err = ioutil.ReadAll(response.Body); err != nil {
-		return "", err
+		return 0, err
 	}
 
 	var bodyRows = strings.Split(string(body), "\n")
@@ -143,10 +145,15 @@ func (p API) GetProductShelfLife(httpClient HTTPClient, url string) (string, err
 
 		// fmt.Println(v)
 		if strings.HasPrefix(strings.Trim(v, " "), "<h4") && strings.Contains(v, "Условия хранения") {
-			if strings.HasPrefix(strings.Trim(bodyRows[i+28], " "), "</a") {
-				res = strings.Trim(bodyRows[i+27], " ")
-			} else {
-				res = strings.Trim(bodyRows[i+26], " ")
+			for index, value := range bodyRows[i : i+60] {
+				if strings.Contains(value, "Срок хранения макс.") || strings.Contains(value, "Срок хранения") {
+					if strings.HasPrefix(strings.Trim(bodyRows[i+index+3], " "), "<a") {
+						res = helpers.RepresentShelflife(strings.Trim(bodyRows[i+index+5], " "))
+					} else {
+						res = helpers.RepresentShelflife(strings.Trim(bodyRows[i+index+4], " "))
+					}
+					break
+				}
 			}
 			break
 		}

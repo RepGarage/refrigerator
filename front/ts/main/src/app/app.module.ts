@@ -1,3 +1,4 @@
+import { SharedModule } from './shared.module';
 import { AppRoutesModule } from './app.routes';
 import { AuthGuard } from './accounting/auth.guard';
 import { BrowserModule } from '@angular/platform-browser';
@@ -32,6 +33,7 @@ import { environment } from '../environments/environment';
 import { AppService } from './app.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthService } from './accounting/auth.service';
+import { AppModalViewComponent } from './modal/modal.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +53,8 @@ import { AuthService } from './accounting/auth.service';
     AppRoutesModule,
     AngularFireModule.initializeApp(environment.firebaseSecret),
     AngularFireDatabaseModule,
-    AngularFireAuthModule
+    AngularFireAuthModule,
+    SharedModule.forRoot()
   ],
   providers: [
     ProductService,
