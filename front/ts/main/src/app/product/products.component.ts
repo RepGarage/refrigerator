@@ -32,7 +32,6 @@ export class ProductsComponent implements OnInit, OnDestroy {
     private $route: ActivatedRoute,
     private $afd: AngularFireDatabase,
     private $rs: RefrigeratorService,
-    private $dom: DomSanitizer,
     private $productService: ProductService,
     private $refService: RefrigeratorService
   ) {}
@@ -42,7 +41,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
     this.products = this.$productService.fetchProducts()
       .map(
         (prods: Array<Product>) => prods.map(
-          p => { p.photoUrl = this.$dom.bypassSecurityTrustUrl(<string>p.photoUrl); return p; }));
+          p => { p.photoUrl = <string>p.photoUrl; return p; }));
     this.selectedProduct = this.$productService.fetchSelectedProduct();
     this.addProductActive = this.$productService.fetchAddProductActive();
   }

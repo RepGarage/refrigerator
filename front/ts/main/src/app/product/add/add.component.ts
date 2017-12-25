@@ -82,8 +82,7 @@ export class AddProductComponent implements OnInit, OnDestroy, AfterViewInit {
    */
   constructor(
     private $ps: ProductService,
-    private $fb: FormBuilder,
-    private $dom: DomSanitizer
+    private $fb: FormBuilder
   ) {}
 
   backToSearch() {
@@ -106,8 +105,11 @@ export class AddProductComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   addProduct() {
+    if (!this.created.valid) { return; }
     const product = this.selectedProduct.getValue();
     product.photoUrl = this.photoURL;
+    product.created = this.created.value;
+    product.exp = this.exp;
     this.$ps.addProduct(product);
     this.destroy();
   }
@@ -157,7 +159,7 @@ export class AddProductComponent implements OnInit, OnDestroy, AfterViewInit {
     this.subscribeCreated();
     this.queryResult.subscribe(
       v => v ? v.map(
-        p => this.$ps.fetchProductImageFromAPI(p, 112).subscribe(image => p.photoUrl = this.$dom.bypassSecurityTrustUrl(image))) : '');
+        p => this.$ps.fetchProductImageFromAPI(p, 112).subscribe(image => p.photoUrl = image)) : '');
     Observable.timer(200).take(1)
         .subscribe(() => {
           this.query.valueChanges
@@ -181,7 +183,7 @@ export class AddProductComponent implements OnInit, OnDestroy, AfterViewInit {
         this.exp = p.exp ? this.calculateExp(p.exp) : 'не рассчитано';
         p.photoUrl = null;
         this.$ps.fetchProductImageFromAPI(p, 112).subscribe(image => {
-          p.photoUrl = this.$dom.bypassSecurityTrustUrl(image);
+          p.photoUrl = image;
           this.photoURL = image;
         });
         this.$ps.fetchProductShelflife(p.product_id).subscribe(shelf => p.shelf = shelf);

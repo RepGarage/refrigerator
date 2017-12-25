@@ -1,3 +1,23 @@
 <app-modal-view [state]="state" [context]="this" [modalState]="state">
-    
+  <div class="container" *ngIf="product | async as p">
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 text-center text-white">
+        <h3>{{ p.name }}</h3>
+      </div>
+    </div>
+    <div class="row bg-white">
+      <div class="col-lg-6">
+        <img [src]="p.photoUrl | safe" alt="">
+      </div>
+      <div class="col-lg-6">
+        <h4>Срок хранения: {{ p.shelf }}</h4>
+        <h4>Годен {{ p.exp }} дней</h4>
+      </div>
+    </div>
+    <div class="row bg-warn">
+      <div class="col-lg-4">
+        <button class="btn btn-lg btn-block btn-danger mt-3 pointer" (click)="remove()">Удалить</button>
+      </div>
+    </div>
+  </div>
 </app-modal-view>

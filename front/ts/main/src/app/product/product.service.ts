@@ -131,7 +131,7 @@ export class ProductService {
   removeProduct(product: Product): void {
     if (this.user) {
       this.$afd.list(`/refrigerators/${this.user.uid}/${this.selectedRefrigerator.key}/products`).remove(product.key);
-      this.selectProduct(undefined);
+      this.selectProduct(null);
     } else {
       return;
     }
@@ -148,6 +148,7 @@ export class ProductService {
 
   selectProduct(p: Product) {
     this.selectedProduct.next(p);
+    localStorage.setItem(this.SELECTED_PRODUCT, JSON.stringify(p));
   }
 
   fetchSelectedProduct(): Observable<Product> {

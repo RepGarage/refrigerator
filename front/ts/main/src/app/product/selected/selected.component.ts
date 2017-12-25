@@ -17,12 +17,18 @@ import { DatePipe } from '@angular/common';
 })
 export class SelectedProductComponent implements OnInit {
     state = 'hidden';
+    product: Observable<Product>;
     constructor(
         private $productService: ProductService
     ) {}
 
     ngOnInit() {
         this.state = 'visible';
+        this.product = this.$productService.fetchSelectedProduct();
+    }
+
+    remove() {
+        this.product.subscribe(p => this.$productService.removeProduct(p));
     }
 
     destroy() {

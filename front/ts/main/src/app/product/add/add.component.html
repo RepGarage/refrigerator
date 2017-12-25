@@ -31,7 +31,7 @@
           </div>
           <hr>
           <div class="row bg-white">
-            <div class="col-lg-6"><img class="h-100" [src]="prod.photoUrl ? prod.photoUrl : ''" alt=""></div>
+            <div class="col-lg-6"><img class="h-100" [src]="prod.photoUrl ? (prod.photoUrl | safe) : ''" alt=""></div>
             <div class="col-lg-6">
               <h4>Срок хранения: {{ prod.shelf }}</h4>
               <h4>Оставшийся срок годности: {{ exp }}</h4>

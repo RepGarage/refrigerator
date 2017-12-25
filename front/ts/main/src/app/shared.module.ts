@@ -9,13 +9,16 @@ import 'rxjs/add/operator/share';
 import 'rxjs/add/observable/timer';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/observable/of';
+import { SafePipe } from './safe.pipe';
 
 @NgModule({
   declarations: [
-    AppModalViewComponent
+    AppModalViewComponent,
+    SafePipe
   ],
   exports: [
-    AppModalViewComponent
+    AppModalViewComponent,
+    SafePipe
   ]
 })
 export class SharedModule {
