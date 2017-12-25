@@ -44,7 +44,7 @@ func TestInsertShelflife(t *testing.T) {
 	}
 	var testShelflife = db.Shelflife{
 		ProductID: 1,
-		Data:      "180 дней",
+		Data:      180,
 	}
 	err := db.Insert(testShelflife, sess, dbName)
 	if err != nil {
@@ -140,7 +140,7 @@ func TestFindShelflifeByProductID(t *testing.T) {
 	}
 	var testShelflife = db.Shelflife{
 		ProductID: 1,
-		Data:      "180 дней",
+		Data:      180,
 	}
 	if err = db.Insert(testShelflife, session, dbName); err != nil {
 		t.Fatal(err)
@@ -150,7 +150,7 @@ func TestFindShelflifeByProductID(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	assert.Equal(t, "180 дней", shelf.Data)
+	assert.Equal(t, 180, shelf.Data)
 	assert.Equal(t, 1, shelf.ProductID, "productID should be 1")
 
 	if shelf, err = db.FindShelflifeByProductID("1", session, dbName); err != nil {
@@ -158,7 +158,7 @@ func TestFindShelflifeByProductID(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	assert.Equal(t, "180 дней", shelf.Data)
+	assert.Equal(t, 180, shelf.Data)
 	assert.Equal(t, 1, shelf.ProductID, "productID should be 1")
 
 	session.DB(dbName).C("shelflife").DropCollection()

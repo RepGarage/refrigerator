@@ -26,7 +26,6 @@ import 'rxjs/add/operator/distinct';
 export class AppComponent implements OnInit {
   selectedProduct: Observable<Product>;
   authState: Observable<User>;
-  selectedProductState = 'none';
   addProductActive: Observable<boolean>;
 
   constructor(
@@ -38,28 +37,17 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.authState = this.$authService.fetchSession();
-    this.addProductActive = this.$productService.addProductActive;
+    this.addProductActive = this.$productService.fetchAddProductActive();
     this.addSubscriptions();
   }
 
   addSubscriptions() {
     this.$appService.watchForLoginConponent();
     this.selectedProduct = this.$productService.fetchSelectedProduct();
-    this.selectedProduct.subscribe((p: Product) => {
-      if (p) {
-        this.triggerSelectedProduct('selected');
-      } else {
-        this.triggerSelectedProduct('none');
-      }
-    });
   }
 
   logout() {
     this.$authService.logout();
-  }
-
-  triggerSelectedProduct(__state: string) {
-    this.selectedProductState = __state;
   }
 
   removeProduct(p: Product) {

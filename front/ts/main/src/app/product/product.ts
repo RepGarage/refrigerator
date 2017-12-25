@@ -4,7 +4,7 @@ export class Product {
   name: string;
   created: string;
   moved: string;
-  shelf: string;
+  shelf: number;
   exp: string;
   product_id: string;
   key: string;
@@ -14,7 +14,7 @@ export class Product {
     name = '',
     created = '',
     moved = '',
-    shelf = '',
+    shelf = 0,
     exp = '',
     product_id = '',
     key = ''

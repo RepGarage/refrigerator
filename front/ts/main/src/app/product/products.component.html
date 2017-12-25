@@ -9,7 +9,7 @@
     <div class="row">
       <ng-container *ngFor="let p of (products | async)">
         <div class="col-sm-2 pointer prod-unit">
-          <app-prod-list-unit [product]="p"></app-prod-list-unit>
+          <app-prod-list-unit (click)="selectProduct(p)" [product]="p"></app-prod-list-unit>
         </div>
       </ng-container>
     </div>

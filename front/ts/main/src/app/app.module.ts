@@ -33,6 +33,7 @@ import { environment } from '../environments/environment';
 import { AppService } from './app.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthService } from './accounting/auth.service';
+import { AppModalViewComponent } from './modal/modal.component';
 
 @NgModule({
   declarations: [

@@ -1,3 +1,4 @@
+import { SharedModule } from './../shared.module';
 import { RouterModule } from '@angular/router';
 import { ListUnitComponent } from './list-unit/list-unit.component';
 import { NgModule } from '@angular/core';
@@ -20,7 +21,8 @@ import { MyMaterialModule } from '../my-material.module';
         FormsModule,
         ReactiveFormsModule,
         MyMaterialModule,
-        RouterModule
+        RouterModule,
+        SharedModule
     ],
     declarations: [
         ProductListComponent,

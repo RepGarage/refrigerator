@@ -1,5 +1,5 @@
 <div class="grid pointer">
-  <img [src]="product.photoUrl" class="card-img-top mr-3">
+  <img [src]="product.photoUrl | safe" class="card-img-top mr-3">
   <div class="text" [ngClass]="{'text-white': textWhite}">
     {{ product.name }}
   </div>

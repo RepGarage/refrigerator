@@ -19,11 +19,12 @@ import { HttpClient } from '@angular/common/http';
 @Injectable()
 export class ProductService {
   readonly ADD_PRODUCT_ACTIVE = 'add_product_active';
+  readonly SELECTED_PRODUCT = 'selected_product';
   private _refrigeratorRef: Observable<AngularFireObject<Refrigerator>>;
   private user: User;
   private selectedRefrigerator: Refrigerator;
-  private selectedProduct: BehaviorSubject<Product> = new BehaviorSubject(null);
   private addProductActive = new BehaviorSubject(Boolean(localStorage.getItem(this.ADD_PRODUCT_ACTIVE)));
+  private selectedProduct = new BehaviorSubject(JSON.parse(localStorage.getItem(this.SELECTED_PRODUCT)));
 
   constructor(
       private $afd: AngularFireDatabase,
@@ -49,6 +50,10 @@ export class ProductService {
     } else {
       return null;
     }
+  }
+
+  fetchAddProductActive() {
+    return this.addProductActive;
   }
 
   /**
@@ -126,7 +131,7 @@ export class ProductService {
   removeProduct(product: Product): void {
     if (this.user) {
       this.$afd.list(`/refrigerators/${this.user.uid}/${this.selectedRefrigerator.key}/products`).remove(product.key);
-      this.selectProduct(undefined);
+      this.selectProduct(null);
     } else {
       return;
     }
@@ -143,6 +148,7 @@ export class ProductService {
 
   selectProduct(p: Product) {
     this.selectedProduct.next(p);
+    localStorage.setItem(this.SELECTED_PRODUCT, JSON.stringify(p));
   }
 
   fetchSelectedProduct(): Observable<Product> {
@@ -174,10 +180,10 @@ export class ProductService {
       .catch(() => Observable.of(null));
   }
 
-  fetchProductShelflife(id: string): Observable<string> {
+  fetchProductShelflife(id: string): Observable<number> {
     return this.$http.get(`${this.productsBaseUrl}api/get/product/shelflife?product_id=${id}`)
-      .map((response: { result: string }) => response.result)
-      .catch(() => Observable.of(''));
+      .map((response: { result: number }) => response.result)
+      .catch(() => Observable.of(0));
   }
 
 }

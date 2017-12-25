@@ -1,0 +1,7 @@
+<div class="slider" [@state]="state">
+  <div class="container bg-dark h-100">
+    <ng-content></ng-content>
+  </div>
+</div>
+<!-- MODAL -->
+<div class="--modal pointer" [@modalState]="modalState" (click)="context.destroy()"></div>

@@ -1,3 +1,4 @@
+import * as moment from 'moment';
 import { Subject } from 'rxjs/Subject';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
@@ -60,6 +61,9 @@ export class AddProductComponent implements OnInit, OnDestroy, AfterViewInit {
   readonly SELECTED_PRODUCT = 'add_product_selected_product';
   readonly addState = AddState;
   query: AbstractControl;
+  created: AbstractControl;
+  exp = 'не рассчитано';
+  photoURL: string;
   queryResult = new BehaviorSubject(<Array<Product>>JSON.parse(localStorage.getItem(this.LAST_QUERY_RESULT)));
   queryState = new BehaviorSubject(localStorage.getItem(this.QUERY_STATE));
   state = AddState.SEARCH;
@@ -78,9 +82,69 @@ export class AddProductComponent implements OnInit, OnDestroy, AfterViewInit {
    */
   constructor(
     private $ps: ProductService,
-    private $fb: FormBuilder,
-    private $dom: DomSanitizer
+    private $fb: FormBuilder
   ) {}
+
+  backToSearch() {
+    this.selectedProduct.next(null);
+  }
+
+  triggerState() {
+    this.animationState === 'hidden' ? this.animationState = 'visible' : this.animationState = 'hidden';
+  }
+
+  selectProduct(p: Product) {
+    this.selectedProduct.next(p);
+  }
+
+  destroy() {
+    this.$ps.setAddProductActive(false);
+    localStorage.removeItem(this.LAST_QUERY_RESULT);
+    localStorage.removeItem(this.ADD_PRODUCT_STAE);
+    localStorage.removeItem(this.SELECTED_PRODUCT);
+  }
+
+  addProduct() {
+    if (!this.created.valid) { return; }
+    const product = this.selectedProduct.getValue();
+    product.photoUrl = this.photoURL;
+    product.created = this.created.value;
+    product.exp = this.exp;
+    this.$ps.addProduct(product);
+    this.destroy();
+  }
+
+  subscribeCreated() {
+    this.created.valueChanges
+      .subscribe(v => {
+        this.exp = this.calculateExp(v);
+        const product = this.selectedProduct.getValue();
+        product.exp = v;
+        this.selectedProduct.next(product);
+      });
+  }
+
+  calculateExp(created: string): string {
+    const from = moment(new Date(created).toISOString());
+    const to = moment();
+    const diff = to.diff(from, 'days');
+    const product = this.selectedProduct.getValue();
+    const shelf = product.shelf ? product.shelf : null;
+    if (!shelf) { return; }
+    const exp = shelf - diff;
+    return exp.toString();
+  }
+
+  /**
+   * LIFECYCLE HOOKS
+   */
+  ngAfterViewInit() {
+    if (this.queryRef) { this.queryRef.nativeElement.focus(); }
+  }
+
+  ngOnDestroy() {
+    this.viewState = 'hidden';
+  }
 
   /**
    * ON INIT
@@ -89,10 +153,13 @@ export class AddProductComponent implements OnInit, OnDestroy, AfterViewInit {
     /**
      * Form initialization
      */
+    const product = this.selectedProduct.getValue();
     this.query = new FormControl();
+    this.created = new FormControl(product ? new Date(product.exp) : '', Validators.compose([Validators.required]));
+    this.subscribeCreated();
     this.queryResult.subscribe(
       v => v ? v.map(
-        p => this.$ps.fetchProductImageFromAPI(p, 112).subscribe(image => p.photoUrl = this.$dom.bypassSecurityTrustUrl(image))) : '');
+        p => this.$ps.fetchProductImageFromAPI(p, 112).subscribe(image => p.photoUrl = image)) : '');
     Observable.timer(200).take(1)
         .subscribe(() => {
           this.query.valueChanges
@@ -113,44 +180,16 @@ export class AddProductComponent implements OnInit, OnDestroy, AfterViewInit {
       this.state = p ? AddState.ADD : AddState.SEARCH;
       localStorage.setItem(this.SELECTED_PRODUCT, JSON.stringify(p));
       if (p) {
+        this.exp = p.exp ? this.calculateExp(p.exp) : 'не рассчитано';
         p.photoUrl = null;
-        this.$ps.fetchProductImageFromAPI(p, 112).subscribe(image => p.photoUrl = this.$dom.bypassSecurityTrustUrl(image));
+        this.$ps.fetchProductImageFromAPI(p, 112).subscribe(image => {
+          p.photoUrl = image;
+          this.photoURL = image;
+        });
         this.$ps.fetchProductShelflife(p.product_id).subscribe(shelf => p.shelf = shelf);
       }
       console.log(p);
     });
   }
 
-  backToSearch() {
-    this.selectedProduct.next(null);
-  }
-
-  triggerState() {
-    this.animationState === 'hidden' ? this.animationState = 'visible' : this.animationState = 'hidden';
-  }
-
-  selectProduct(p: Product) {
-    this.selectedProduct.next(p);
-  }
-
-  destroy() {
-    this.$ps.setAddProductActive(false);
-    localStorage.removeItem(this.LAST_QUERY_RESULT);
-  }
-
-  appear() {
-    this.animationState = 'visible';
-  }
-
-  disappear() {
-    this.animationState = 'hidden';
-  }
-
-  ngAfterViewInit() {
-    if (this.queryRef) { this.queryRef.nativeElement.focus(); }
-  }
-
-  ngOnDestroy() {
-    this.viewState = 'hidden';
-  }
 }

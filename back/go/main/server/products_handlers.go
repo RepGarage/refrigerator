@@ -112,7 +112,7 @@ func (p *ProductsAPI) GetProductShelflifeHandler(
 	r *http.Request) {
 
 	var productID = r.URL.Query().Get("product_id")
-	var result string
+	var result int
 	var response []byte
 	var err error
 	var shelf db.Shelflife
@@ -137,7 +137,7 @@ func (p *ProductsAPI) GetProductShelflifeHandler(
 			return
 		}
 
-		if response, err = json.Marshal(map[string]string{"result": result}); err != nil {
+		if response, err = json.Marshal(map[string]int{"result": result}); err != nil {
 			w.WriteHeader(500)
 			log.Println(err)
 			return
@@ -153,7 +153,7 @@ func (p *ProductsAPI) GetProductShelflifeHandler(
 			Data:      result,
 		})
 	} else {
-		if response, err = json.Marshal(map[string]string{"result": shelf.Data}); err != nil {
+		if response, err = json.Marshal(map[string]int{"result": shelf.Data}); err != nil {
 			w.WriteHeader(500)
 			log.Println(err)
 			return
