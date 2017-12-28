@@ -87,6 +87,17 @@ export class RefrigeratorsComponent implements OnInit, AfterViewChecked, OnDestr
       this.triggerExpand('minimized');
     }
 
+    addNew() {
+      this.$rs.addRefrigerator({
+        key: '',
+        name: 'Новый холодильник',
+        products: [],
+        archivedProducts: [],
+        iconAssetUrl: '',
+        photo: ''
+      });
+    }
+
     /**
      * On destroy
      */

@@ -6,12 +6,21 @@
   </h3>
   <hr>
   <div class="container">
-    <div class="row">
+    <div class="row" *ngIf="(products | async)?.length > 0; else noProducts">
       <ng-container *ngFor="let p of (products | async)">
         <div class="col-sm-2 pointer prod-unit">
           <app-prod-list-unit (click)="selectProduct(p)" [product]="p"></app-prod-list-unit>
         </div>
       </ng-container>
     </div>
+    <ng-template #noProducts>
+      <div class="jumbotron">
+        <h1>
+          Нет ни одного продукта!
+        </h1>
+        <hr>
+        <button class="btn bg-primary btn-lg text-white pointer" (click)="triggerAddProductActive()">Добавить</button>
+      </div>
+    </ng-template>
   </div>
 </div>

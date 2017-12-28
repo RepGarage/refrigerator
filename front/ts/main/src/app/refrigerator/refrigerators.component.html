@@ -1,9 +1,7 @@
 <div class="container">
   <h3>
     Мои холодильники
-    <span class="badge badge-secondary">
-      {{ (refrigerators | async)?.length }}
-    </span>
+    <span class="badge badge-primary pointer badge-pill" (click)="addNew()">Добавить</span>
   </h3>
   <hr>
 </div>
@@ -11,7 +9,7 @@
   <div class="row">
     <ng-container *ngIf="(refrigerators | async); let refs; else refsPlaceholder">
       <ng-container *ngFor="let ref of refs">
-        <div class="col-sm">
+        <div class="col-sm-3 col-lg-3 col-md-3 mb-3">
           <app-ref-unit [ref]="ref"></app-ref-unit>
         </div>
       </ng-container>
