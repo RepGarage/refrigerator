@@ -13,13 +13,15 @@ type Server struct {
 	mux  *http.ServeMux
 }
 
+var productsAPI ProductsAPI
+var api API
+
 // Serve serve http server
 func (s *Server) Serve() {
 	log.Printf("Starting HTTP server on :%v", s.Port)
 	s.mux = http.NewServeMux()
 	var apiHandler = APIHandler{
-		apiInterface: apiInterface,
-		mux:          s.mux,
+		mux: s.mux,
 	}
 	s.mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		log.Printf("%v %v", r.Method, r.URL.Path)
@@ -35,13 +37,13 @@ type APIHandler struct {
 	mux *http.ServeMux
 }
 
-// GetProductsHandler handler
-func (a *APIHandler) GetProductsHandler() func(w http.ResponseWriter, r *http.Request) {
+// HandleGetProducts func
+func (a *APIHandler) HandleGetProducts() func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Access-Control-Allow-Origin", "http://localhost:4200")
 		w.Header().Add("Content-Type", "application/json")
 		log.Printf("%v %v", r.Method, r.URL.Path)
-		productsAPI.GetProductsHandler(a.apiInterface, a.dbi, w, r)
+		productsAPI.GetProductsHandler(api, db, w, r)
 	}
 }
 
