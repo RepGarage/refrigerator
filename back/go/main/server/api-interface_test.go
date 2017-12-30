@@ -2,6 +2,7 @@ package server_test
 
 import (
 	"bytes"
+	"encoding/json"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -21,27 +22,43 @@ var (
 	api                 server.API
 )
 
-func TestGetProducts(t *testing.T) {
-	var requestProductName = "cheese"
-	defer gock.Off()
-	gock.New(productsBaseURL).
-		Get("prompt").
-		Reply(200).
-		JSON(server.ProductsResponse{
-			Text: "Test",
-			Results: []server.ResponseProduct{
-				{
-					Entity:    "product",
-					Text:      requestProductName,
-					ProductID: 1,
-				},
-			},
-		})
+type getProductsTestHTTPClient struct{}
 
-	result, err := api.GetProducts(&http.Client{}, requestProductName)
+func (h getProductsTestHTTPClient) Get(string) (*http.Response, error) {
+	var (
+		err  error
+		body []byte
+	)
+
+	if body, err = json.Marshal(server.ProductsResponse{
+		Text: "Test",
+		Results: []server.ResponseProduct{
+			{
+				Entity:    "product",
+				Text:      requestProductName,
+				ProductID: 1,
+			},
+		},
+	}); err != nil {
+		return
+	}
+
+	return nil, &http.Response{
+		Body: body,
+	}
+}
+
+func TestGetProducts(t *testing.T) {
+	var (
+		requestProductName = "cheese"
+		result             *http.Response
+		httpClient         getProductsTestHTTPClient
+		err                error
+	)
+
+	result, err = api.GetProducts(&httpClient, requestProductName)
 
 	assert.Equal(t, nil, err, "error should be nil")
-
 	assert.Equal(t, 1, len(result), "result len should be 1")
 
 }
@@ -81,47 +98,3 @@ func TestGerProductImageFromAPI(t *testing.T) {
 	gock.Off()
 
 }
-
-// type shelfLifeHTTPClient struct{}
-
-// func (s shelfLifeHTTPClient) Get(url string) (*http.Response, error) {
-// 	switch url {
-// 	case "/moloko-syr-yaytsa/syry/hochl-syr-pl-tost-s-vet-lomt-45150g--305146?searchPhrase=ветчина":
-// 		return &http.Response{
-// 			Body: ioutil.NopCloser(bytes.NewBuffer([]byte("<h4 Условия хранения " + "\nСрок хранения макс." + strings.Repeat("\n", 5) + "180 дней" + strings.Repeat("\n", 60)))),
-// 		}, nil
-// 	case "/moloko-syr-yaytsa/syry/hochl-syr-55-s-vetch-vann-plavl-400g--308011?searchPhrase=ветчина":
-// 		return &http.Response{
-// 			Body: ioutil.NopCloser(bytes.NewBuffer([]byte("<h4 Условия хранения " + "\nСрок хранения макс." + strings.Repeat("\n", 5) + "180 дней" + strings.Repeat("\n", 60)))),
-// 		}, nil
-// 	case "/konservy-orehi-sousy/myasnye-konservy/elinskiy-vetchina-sterilizov-gost-325g--313010?searchPhrase=ветчина":
-// 		return &http.Response{
-// 			Body: ioutil.NopCloser(bytes.NewBuffer([]byte("<h4 Условия хранения " + "\nСрок хранения макс." + strings.Repeat("\n", 5) + "365 дней" + strings.Repeat("\n", 60)))),
-// 		}, nil
-// 	case "/catalog/moloko-syr-yaytsa/moloko/prav-mol-moloko-past-3-2-4-pet-2l--310201":
-// 		return &http.Response{
-// 			Body: ioutil.NopCloser(bytes.NewBuffer([]byte("<h4 Условия хранения " + "\nСрок хранения макс." + strings.Repeat("\n", 5) + "25 дней" + strings.Repeat("\n", 60)))),
-// 		}, nil
-// 	}
-
-// 	return &http.Response{}, nil
-// }
-// func TestGetProductShelfLife(t *testing.T) {
-// 	var err error
-// 	var result string
-// 	var api server.API
-// 	var httpClient shelfLifeHTTPClient
-// 	var cases = map[string]string{
-// 		"/moloko-syr-yaytsa/syry/hochl-syr-pl-tost-s-vet-lomt-45150g--305146?searchPhrase=ветчина":                   "180 дней",
-// 		"/moloko-syr-yaytsa/syry/hochl-syr-55-s-vetch-vann-plavl-400g--308011?searchPhrase=ветчина":                  "180 дней",
-// 		"/konservy-orehi-sousy/myasnye-konservy/elinskiy-vetchina-sterilizov-gost-325g--313010?searchPhrase=ветчина": "365 дней",
-// 		"/catalog/moloko-syr-yaytsa/moloko/prav-mol-moloko-past-3-2-4-pet-2l--310201":                                "25 дней",
-// 	}
-
-// 	for k, v := range cases {
-// 		if result, err = api.GetProductShelfLife(httpClient, k); err != nil {
-// 			t.Fatal(err)
-// 		}
-// 		assert.Equal(t, v, result)
-// 	}
-// }

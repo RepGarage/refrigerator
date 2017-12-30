@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"strconv"
 
+	"gopkg.in/mgo.v2/bson"
+
 	"github.com/centrypoint/refrigerator/back/go/main/db"
 )
 
@@ -14,8 +16,8 @@ type ProductsAPI struct{}
 
 // GetProductsHandler func
 func (p *ProductsAPI) GetProductsHandler(
-	apiInterface APIInterface,
-	dbi DatabaseInterface,
+	api GetProductsInterface,
+	dbInserter db.Inserter,
 	w http.ResponseWriter,
 	r *http.Request) {
 
@@ -24,7 +26,7 @@ func (p *ProductsAPI) GetProductsHandler(
 		w.WriteHeader(400)
 		return
 	}
-	products, err := apiInterface.GetProducts(&http.Client{}, name)
+	products, err := api.GetProducts(&http.Client{}, name)
 	if err != nil {
 		w.WriteHeader(500)
 		return
@@ -39,19 +41,29 @@ func (p *ProductsAPI) GetProductsHandler(
 
 	// Concurrent add products to database
 	for _, v := range products {
-		go dbi.InsertProductToDB(v)
+		go func(prod db.Product) {
+			dbInserter.Insert(prod, db.Database.Session, db.Name)
+		}(v)
 	}
 }
 
 // GetProductImageHandler func
 func (p *ProductsAPI) GetProductImageHandler(
-	apiInterface APIInterface,
-	dbi DatabaseInterface,
+	api GetProductImageInterface,
+	dbi db.FindInserter,
 	w http.ResponseWriter,
 	r *http.Request) {
 
-	productID := r.URL.Query().Get("product_id")
-	side := r.URL.Query().Get("side")
+	var (
+		productID     = r.URL.Query().Get("product_id")
+		side          = r.URL.Query().Get("side")
+		dbQueryResult interface{}
+		photo         db.Photo
+		image         string
+		ok            bool
+		err           error
+	)
+
 	if len(productID) < 1 {
 		w.WriteHeader(400)
 		return
@@ -62,10 +74,14 @@ func (p *ProductsAPI) GetProductImageHandler(
 	}
 
 	// Fetch from database
-	image, err := dbi.FetchPhotoFromDBByProductID(productID, side)
-	if len(image.Data) < 10 || err != nil {
-		image, err := apiInterface.GetProductImageFromAPI(&http.Client{}, side, productID)
-		if err != nil {
+	dbQueryResult, err = dbi.Find(bson.M{"_id": productID, "side": side}, db.Photo{}, db.Database.Session, db.Name)
+	if photo, ok = dbQueryResult.(db.Photo); ok == false {
+		w.WriteHeader(500)
+		log.Println("DbQueryResult return non photo value as expected")
+		return
+	}
+	if len(photo.Data) < 10 || err != nil {
+		if image, err = api.GetProductImageFromAPI(&http.Client{}, side, productID); err != nil {
 			w.WriteHeader(500)
 			return
 		}
@@ -84,16 +100,16 @@ func (p *ProductsAPI) GetProductImageHandler(
 			numSide, e := strconv.Atoi(side)
 			if e == nil {
 				// Concurrent add photo to db
-				go dbi.InsertPhotoToDB(db.Photo{
+				go dbi.Insert(db.Photo{
 					ProductID: numProductID,
 					Side:      numSide,
 					Data:      image,
-				})
+				}, nil, nil)
 			}
 		}
 
 	} else {
-		response, e := json.Marshal(map[string]string{"result": image.Data})
+		response, e := json.Marshal(map[string]string{"result": photo.Data})
 		if e != nil {
 			w.WriteHeader(500)
 			return
@@ -106,32 +122,41 @@ func (p *ProductsAPI) GetProductImageHandler(
 
 // GetProductShelflifeHandler func
 func (p *ProductsAPI) GetProductShelflifeHandler(
-	apiInterface APIInterface,
-	dbi DatabaseInterface,
+	api GetProductShelfLifeInterface,
+	dbi db.FindInserter,
 	w http.ResponseWriter,
 	r *http.Request) {
 
-	var productID = r.URL.Query().Get("product_id")
-	var result int
-	var response []byte
-	var err error
-	var shelf db.Shelflife
+	var (
+		productID     = r.URL.Query().Get("product_id")
+		result        int
+		response      []byte
+		err           error
+		dbQueryResult interface{}
+		ok            bool
+		shelf         db.Shelflife
+	)
 
 	if len(productID) < 1 {
 		w.WriteHeader(400)
 		return
 	}
 
-	if shelf, err = dbi.FetchShelflifeFromDBByProductID(productID); err != nil {
+	if dbQueryResult, err = dbi.Find(bson.M{"_id": productID}, db.Shelflife{}, nil, nil); err != nil {
 		var product db.Product
 		err = nil
-		if product, err = dbi.FetchProductFromDBByID(productID); err != nil {
+		if dbQueryResult, err = dbi.Find(bson.M{"_id": productID}, db.Product{}, nil, nil); err != nil {
 			w.WriteHeader(500)
 			log.Println(err)
 			return
 		}
 
-		if result, err = apiInterface.GetProductShelfLife(&http.Client{}, product.URL); err != nil {
+		if product, ok = dbQueryResult.(db.Product); !ok {
+			w.WriteHeader(500)
+			return
+		}
+
+		if result, err = api.GetProductShelfLife(&http.Client{}, product.URL); err != nil {
 			w.WriteHeader(500)
 			log.Println(err)
 			return
