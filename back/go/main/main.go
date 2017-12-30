@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 
+	_ "github.com/centrypoint/refrigerator/back/go/main/db"
 	"github.com/centrypoint/refrigerator/back/go/main/server"
 )
 

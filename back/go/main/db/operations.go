@@ -1,32 +1,35 @@
 package db
 
 import (
-	"strconv"
-
 	"gopkg.in/mgo.v2"
-	"gopkg.in/mgo.v2/bson"
 )
 
-// Prepare ensure indexes
-// func Prepare(sess *mgo.Session, dbName) error {
-// 	clone := sess.Clone()
-// 	defer clone.Close()
-// 	clone.DB(dbName).C("products").EnsureIndexKey("_id")
-// }
-
 // Insert generic function
-func Insert(model interface{}, sess *mgo.Session, dbName string) error {
+func Insert(model interface{}, sess *mgo.Session, dbName interface{}) error {
+	var ok bool
+	var name string
+	if sess == nil {
+		sess = Database.Session
+	}
+	if dbName == nil {
+		name = Name
+	}
+	if name, ok = dbName.(string); !ok {
+		return UnknownDatabaseNameTypeError{}
+	}
+
 	cloneSess := sess.Clone()
 	defer cloneSess.Close()
+
 	switch model.(type) {
 	case Product:
-		e := cloneSess.DB(dbName).C("products").Insert(model)
+		e := cloneSess.DB(name).C("products").Insert(model)
 		return e
 	case Photo:
-		e := cloneSess.DB(dbName).C("photos").Insert(model)
+		e := cloneSess.DB(name).C("photos").Insert(model)
 		return e
 	case Shelflife:
-		e := cloneSess.DB(dbName).C("shelflife").Insert(model)
+		e := cloneSess.DB(name).C("shelflife").Insert(model)
 		return e
 	default:
 		return UnknownModelError{}
@@ -34,70 +37,37 @@ func Insert(model interface{}, sess *mgo.Session, dbName string) error {
 	}
 }
 
-// FindPhotoByProductID func
-func FindPhotoByProductID(id interface{}, side interface{}, sess *mgo.Session, dbName string) (Photo, error) {
+// Find generic query to db
+func Find(query interface{}, t interface{}, sess *mgo.Session, dbName interface{}) (result interface{}, err error) {
 	cloneSess := sess.Clone()
 	defer cloneSess.Close()
-	var result Photo
-	var iID int
-	var iSide int
-	// Converts
-	switch v := id.(type) {
-	case string:
-		iID, _ = strconv.Atoi(v)
-		break
-	case int:
-		iID = v
-		break
+	var (
+		queryBSON []byte
+	)
+
+	var ok bool
+	var name string
+	if sess == nil {
+		sess = Database.Session
+	}
+	if dbName == nil {
+		name = Name
+	}
+	if name, ok = dbName.(string); !ok {
+		return nil, UnknownDatabaseNameTypeError{}
 	}
 
-	switch v := side.(type) {
-	case string:
-		iSide, _ = strconv.Atoi(v)
-		break
-	case int:
-		iSide = v
-		break
+	switch t.(type) {
+	case Photo:
+		err = cloneSess.DB(name).C("photos").Find(queryBSON).One(&result)
+		return
+	case Product:
+		err = cloneSess.DB(name).C("products").Find(queryBSON).One(&result)
+		return
+	case Shelflife:
+		err = cloneSess.DB(name).C("shelflifes").Find(queryBSON).One(&result)
+		return
+	default:
+		return nil, UnknownModelError{}
 	}
-
-	e := cloneSess.DB(dbName).C("photos").Find(bson.M{"_id": iID, "side": iSide}).One(&result)
-	return result, e
-}
-
-// FindProductByID func
-func FindProductByID(id interface{}, sess *mgo.Session, dbName string) (Product, error) {
-	cloneSess := sess.Clone()
-	defer cloneSess.Close()
-	var result Product
-	var iID int
-	// Converts
-	switch v := id.(type) {
-	case string:
-		iID, _ = strconv.Atoi(v)
-		break
-	case int:
-		iID = v
-		break
-	}
-	e := cloneSess.DB(dbName).C("products").Find(bson.M{"_id": iID}).One(&result)
-	return result, e
-}
-
-// FindShelflifeByProductID func
-func FindShelflifeByProductID(id interface{}, sess *mgo.Session, dbName string) (Shelflife, error) {
-	cloneSess := sess.Clone()
-	defer cloneSess.Close()
-	var result Shelflife
-	var iID int
-	// Converts
-	switch v := id.(type) {
-	case string:
-		iID, _ = strconv.Atoi(v)
-		break
-	case int:
-		iID = v
-		break
-	}
-	e := cloneSess.DB(dbName).C("shelflife").Find(bson.M{"_id": iID}).One(&result)
-	return result, e
 }

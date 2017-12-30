@@ -20,15 +20,25 @@ var (
 	partnerID           = os.Getenv("PARTNER_ID")
 )
 
-// APIInterface api calls
-type APIInterface interface {
+// GetProductsInterface interface
+type GetProductsInterface interface {
 	GetProducts(httpClient HTTPClient, name string) ([]db.Product, error)
+}
+
+// GetProductImageInterface interface
+type GetProductImageInterface interface {
 	GetProductImageFromAPI(httpClient HTTPClient, side interface{}, productID interface{}) (string, error)
+}
+
+// GetProductShelfLifeInterface interface
+type GetProductShelfLifeInterface interface {
 	GetProductShelfLife(httpClient HTTPClient, url string) (int, error)
 }
 
-// API ApiInterface implementation
-type API struct{}
+// HTTPClient interface
+type HTTPClient interface {
+	Get(string) (*http.Response, error)
+}
 
 // ProductsResponse type response
 type ProductsResponse struct {
@@ -44,32 +54,31 @@ type ResponseProduct struct {
 	URL       string `json:"url,omitempty"`
 }
 
-// HTTPClient interface
-type HTTPClient interface {
-	Get(string) (*http.Response, error)
-}
+// API ApiInterface implementation
+type API struct{}
 
 // GetProducts return products object
-func (p API) GetProducts(httpClient HTTPClient, name string) ([]db.Product, error) {
-	r, err := httpClient.Get(productsBaseURL + "prompt?text=" + name)
-	if err != nil {
-		return []db.Product{}, err
+func (p API) GetProducts(httpClient HTTPClient, name string) (result []db.Product, err error) {
+	var (
+		response         *http.Response
+		body             []byte
+		productsResponse ProductsResponse
+	)
+	if response, err = httpClient.Get(productsBaseURL + "prompt?text=" + name); err != nil {
+		return
 	}
-	defer r.Body.Close()
+	defer response.Body.Close()
 
-	var productsResponse ProductsResponse
-	body, e := ioutil.ReadAll(r.Body)
-	if e != nil {
-		return []db.Product{}, e
-	}
-
-	_err := json.Unmarshal(body, &productsResponse)
-	if _err != nil {
-		return []db.Product{}, _err
+	if body, err = ioutil.ReadAll(response.Body); err != nil {
+		return
 	}
 
-	result := convertProductsResponseToProducts(productsResponse)
-	return result, nil
+	if err = json.Unmarshal(body, &productsResponse); err != nil {
+		return
+	}
+
+	result = convertProductsResponseToProducts(productsResponse)
+	return
 }
 
 func convertProductsResponseToProducts(r ProductsResponse) []db.Product {

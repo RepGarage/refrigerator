@@ -60,6 +60,7 @@ export class RefrigeratorService {
       if (this.user) {
         return this.$afd.object(`/refrigerators/${this.user.uid}`).valueChanges()
         .map((value: Object) => {
+          if (!value) { return []; }
           const result: Array<Refrigerator> = [];
           Object.keys(value)
             .map((k, i) => {
@@ -154,6 +155,16 @@ export class RefrigeratorService {
         .subscribe((user: User) => {
           if (user) {
             this.$afd.object(`/refrigerators/${user.uid}/${key}/name`).set(name);
+          }
+        });
+    }
+
+    deleteCurrenRef(key: string) {
+      this.selectRefrigerator(null);
+      this.$auth.fetchSession()
+        .subscribe((user: User) => {
+          if (user) {
+            this.$afd.object(`/refrigerators/${user.uid}/${key}`).remove();
           }
         });
     }

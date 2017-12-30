@@ -1,3 +1,4 @@
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { ProductService } from './../../product/product.service';
 import { Observable } from 'rxjs/Observable';
 import { Component, OnInit } from '@angular/core';
@@ -10,7 +11,7 @@ import { Refrigerator } from '../refrigerator';
   styleUrls: ['./menu.component.sass']
 })
 export class RefMenuComponent implements OnInit {
-  selectedRefrigerator: Observable<Refrigerator>;
+  selectedRefrigerator: BehaviorSubject<Refrigerator>;
   newName: string;
   editingName = false;
   constructor(
@@ -20,7 +21,7 @@ export class RefMenuComponent implements OnInit {
 
   ngOnInit() {
     this.selectedRefrigerator = this.$rs.selectedRefrigerator;
-    this.selectedRefrigerator.subscribe((r: Refrigerator) => this.newName = r.name);
+    this.selectedRefrigerator.subscribe((r: Refrigerator) => r ? this.newName = r.name : '');
   }
 
   /**
@@ -28,6 +29,14 @@ export class RefMenuComponent implements OnInit {
    */
   triggerAddProductState() {
     this.$ps.triggerAddProductState();
+  }
+
+  setEditingName(value: boolean) {
+    this.editingName = value;
+  }
+
+  destroyRef() {
+    this.$rs.deleteCurrenRef(this.selectedRefrigerator.getValue().key);
   }
 
   updateName() {

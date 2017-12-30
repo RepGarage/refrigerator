@@ -50,6 +50,10 @@ export class ProductsComponent implements OnInit, OnDestroy {
     // delete subscriptions here
   }
 
+  triggerAddProductActive() {
+    this.$productService.setAddProductActive(true);
+  }
+
   addProduct(product: Product) {
     this.$productService.addProduct(product);
   }
